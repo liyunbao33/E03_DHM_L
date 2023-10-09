@@ -7,7 +7,7 @@
    This file is generated for:
    Atomic software component:  "DHM"
    ARXML schema: "4.3"
-   File generated on: "07-Oct-2023 08:46:11"  */
+   File generated on: "09-Oct-2023 09:22:14"  */
 
 #ifndef Rte_DHM_h
 #define Rte_DHM_h
@@ -86,6 +86,12 @@ Std_ReturnType
 Std_ReturnType Rte_Read_VbOUT_SP_CrashOutpSts_flg_VbOUT_SP_CrashOutpSts_flg
   (Boolean* u);
 
+#define Rte_Read_VeINP_CAN_FRDoorHandleLrnSts_sig_VeINP_CAN_FRDoorHandleLrnSts_sig Rte_Read_DHM_VeINP_CAN_FRDoorHandleLrnSts_sig_VeINP_CAN_FRDoorHandleLrnSts_sig
+
+Std_ReturnType
+  Rte_Read_VeINP_CAN_FRDoorHandleLrnSts_sig_VeINP_CAN_FRDoorHandleLrnSts_sig
+  (UInt8* u);
+
 #define Rte_Read_VeINP_CAN_FRDoorHandleSts_sig_VeINP_CAN_FRDoorHandleSts_sig Rte_Read_DHM_VeINP_CAN_FRDoorHandleSts_sig_VeINP_CAN_FRDoorHandleSts_sig
 
 Std_ReturnType
@@ -100,6 +106,12 @@ Std_ReturnType Rte_Read_VeINP_CAN_RHFDoorSts_sig_VeINP_CAN_RHFDoorSts_sig(UInt8*
 
 Std_ReturnType Rte_Read_VeINP_CAN_RHRDoorSts_sig_VeINP_CAN_RHRDoorSts_sig(UInt8*
   u);
+
+#define Rte_Read_VeINP_CAN_RRDoorHandleLrnSts_sig_VeINP_CAN_RRDoorHandleLrnSts_sig Rte_Read_DHM_VeINP_CAN_RRDoorHandleLrnSts_sig_VeINP_CAN_RRDoorHandleLrnSts_sig
+
+Std_ReturnType
+  Rte_Read_VeINP_CAN_RRDoorHandleLrnSts_sig_VeINP_CAN_RRDoorHandleLrnSts_sig
+  (UInt8* u);
 
 #define Rte_Read_VeINP_CAN_RRDoorHandleSts_sig_VeINP_CAN_RRDoorHandleSts_sig Rte_Read_DHM_VeINP_CAN_RRDoorHandleSts_sig_VeINP_CAN_RRDoorHandleSts_sig
 
