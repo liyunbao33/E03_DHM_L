@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.356
+ * Model version                  : 1.358
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 10 11:03:45 2023
+ * C/C++ source code generated on : Tue Oct 10 17:14:02 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -33,47 +33,47 @@
 #define rtmSetErrorStatus(rtm, val)    ((rtm)->errorStatus = (val))
 #endif
 
-/* Block states (default storage) for system '<S14>/CtrlLogic' */
+/* Block states (default storage) for system '<S12>/CtrlLogic' */
 typedef struct {
-  uint8_T is_active_c1_DoorHndDriver;  /* '<S14>/CtrlLogic' */
-  uint8_T is_Ctrl;                     /* '<S14>/CtrlLogic' */
-  uint8_T is_Unfold;                   /* '<S14>/CtrlLogic' */
-  uint8_T is_Icebreak;                 /* '<S14>/CtrlLogic' */
-  uint8_T is_Fold;                     /* '<S14>/CtrlLogic' */
-  uint8_T temporalCounter_i1;          /* '<S14>/CtrlLogic' */
-  boolean_T SI_b_DoorHndUnfoldReq_prev;/* '<S14>/CtrlLogic' */
-  boolean_T SI_b_DoorHndUnfoldReq_start;/* '<S14>/CtrlLogic' */
-  boolean_T SI_b_DoorHndFoldReq_prev;  /* '<S14>/CtrlLogic' */
-  boolean_T SI_b_DoorHndFoldReq_start; /* '<S14>/CtrlLogic' */
+  uint8_T is_active_c1_DoorHndDriver;  /* '<S12>/CtrlLogic' */
+  uint8_T is_Ctrl;                     /* '<S12>/CtrlLogic' */
+  uint8_T is_Unfold;                   /* '<S12>/CtrlLogic' */
+  uint8_T is_Icebreak;                 /* '<S12>/CtrlLogic' */
+  uint8_T is_Fold;                     /* '<S12>/CtrlLogic' */
+  uint8_T temporalCounter_i1;          /* '<S12>/CtrlLogic' */
+  boolean_T SI_b_DoorHndUnfoldReq_prev;/* '<S12>/CtrlLogic' */
+  boolean_T SI_b_DoorHndUnfoldReq_start;/* '<S12>/CtrlLogic' */
+  boolean_T SI_b_DoorHndFoldReq_prev;  /* '<S12>/CtrlLogic' */
+  boolean_T SI_b_DoorHndFoldReq_start; /* '<S12>/CtrlLogic' */
 } DW_CtrlLogic_DHM_T;
 
-/* Block states (default storage) for system '<S14>/DoorHndPos' */
+/* Block states (default storage) for system '<S12>/DoorHndPos' */
 typedef struct {
-  uint8_T is_active_c5_DoorHndDriver;  /* '<S14>/DoorHndPos' */
+  uint8_T is_active_c5_DoorHndDriver;  /* '<S12>/DoorHndPos' */
 } DW_DoorHndPos_DHM_T;
 
-/* Block states (default storage) for system '<S14>/LearnLogic' */
+/* Block states (default storage) for system '<S12>/LearnLogic' */
 typedef struct {
-  uint8_T is_active_c3_DoorHndDriver;  /* '<S14>/LearnLogic' */
-  uint8_T is_c3_DoorHndDriver;         /* '<S14>/LearnLogic' */
-  uint8_T is_LearnLogic;               /* '<S14>/LearnLogic' */
-  uint8_T SI_e_AutoLearnCount;         /* '<S14>/LearnLogic' */
-  uint8_T temporalCounter_i1;          /* '<S14>/LearnLogic' */
-  boolean_T SI_b_LearnReq_prev;        /* '<S14>/LearnLogic' */
-  boolean_T SI_b_LearnReq_start;       /* '<S14>/LearnLogic' */
+  uint8_T is_active_c3_DoorHndDriver;  /* '<S12>/LearnLogic' */
+  uint8_T is_c3_DoorHndDriver;         /* '<S12>/LearnLogic' */
+  uint8_T is_LearnLogic;               /* '<S12>/LearnLogic' */
+  uint8_T SI_e_AutoLearnCount;         /* '<S12>/LearnLogic' */
+  uint8_T temporalCounter_i1;          /* '<S12>/LearnLogic' */
+  boolean_T SI_b_LearnReq_prev;        /* '<S12>/LearnLogic' */
+  boolean_T SI_b_LearnReq_start;       /* '<S12>/LearnLogic' */
 } DW_LearnLogic_DHM_T;
 
-/* Block states (default storage) for system '<S14>/MotorLogic' */
+/* Block states (default storage) for system '<S12>/MotorLogic' */
 typedef struct {
-  uint8_T is_active_c4_DoorHndDriver;  /* '<S14>/MotorLogic' */
+  uint8_T is_active_c4_DoorHndDriver;  /* '<S12>/MotorLogic' */
 } DW_MotorLogic_DHM_T;
 
-/* Block states (default storage) for system '<S14>/Stall' */
+/* Block states (default storage) for system '<S12>/Stall' */
 typedef struct {
-  int16_T SL_s_CurrentPos_Old;         /* '<S14>/Stall' */
-  uint8_T is_active_c2_DoorHndDriver;  /* '<S14>/Stall' */
-  uint8_T is_Stall_Handler;            /* '<S14>/Stall' */
-  uint8_T temporalCounter_i1;          /* '<S14>/Stall' */
+  int16_T SL_s_CurrentPos_Old;         /* '<S12>/Stall' */
+  uint8_T is_active_c2_DoorHndDriver;  /* '<S12>/Stall' */
+  uint8_T is_Stall_Handler;            /* '<S12>/Stall' */
+  uint8_T temporalCounter_i1;          /* '<S12>/Stall' */
 } DW_Stall_DHM_T;
 
 /* Block states (default storage) for system '<S3>/FLDoorHndReq' */
@@ -84,12 +84,8 @@ typedef struct {
   uint8_T temporalCounter_i1;          /* '<S3>/FLDoorHndReq' */
   uint8_T temporalCounter_i2;          /* '<S3>/FLDoorHndReq' */
   boolean_T SL_b_UnfoldReqTrig;        /* '<S3>/FLDoorHndReq' */
-  boolean_T SI_b_DoorOpen_prev;        /* '<S3>/FLDoorHndReq' */
-  boolean_T SI_b_DoorOpen_start;       /* '<S3>/FLDoorHndReq' */
   boolean_T SI_b_CrashOutpSts_prev;    /* '<S3>/FLDoorHndReq' */
   boolean_T SI_b_CrashOutpSts_start;   /* '<S3>/FLDoorHndReq' */
-  Door_Sts_E SI_m_DoorLockSts_prev;    /* '<S3>/FLDoorHndReq' */
-  Door_Sts_E SI_m_DoorLockSts_start;   /* '<S3>/FLDoorHndReq' */
 } DW_FLDoorHndReq_DHM_T;
 
 /* Block signals (default storage) */
@@ -97,15 +93,15 @@ typedef struct {
   int16_T SO_s_MaxSoftPos;             /* '<S17>/DoorHndPos' */
   int16_T SO_s_MinSoftPos;             /* '<S17>/DoorHndPos' */
   int16_T SO_s_IceBrkPos;              /* '<S17>/DoorHndPos' */
-  int16_T SO_s_MaxSoftPos_k;           /* '<S14>/DoorHndPos' */
-  int16_T SO_s_MinSoftPos_n;           /* '<S14>/DoorHndPos' */
-  int16_T SO_s_IceBrkPos_k;            /* '<S14>/DoorHndPos' */
+  int16_T SO_s_MaxSoftPos_k;           /* '<S12>/DoorHndPos' */
+  int16_T SO_s_MinSoftPos_n;           /* '<S12>/DoorHndPos' */
+  int16_T SO_s_IceBrkPos_k;            /* '<S12>/DoorHndPos' */
   uint8_T SO_e_MotorCmd;               /* '<S17>/MotorLogic' */
   uint8_T SO_e_MotorCmd_a;             /* '<S17>/LearnLogic' */
   uint8_T SO_e_MotorPwm_e;             /* '<S17>/LearnLogic' */
-  uint8_T SO_e_MotorCmd_c;             /* '<S14>/MotorLogic' */
-  uint8_T SO_e_MotorCmd_j;             /* '<S14>/LearnLogic' */
-  uint8_T SO_e_MotorPwm_m;             /* '<S14>/LearnLogic' */
+  uint8_T SO_e_MotorCmd_c;             /* '<S12>/MotorLogic' */
+  uint8_T SO_e_MotorCmd_j;             /* '<S12>/LearnLogic' */
+  uint8_T SO_e_MotorPwm_m;             /* '<S12>/LearnLogic' */
   boolean_T SO_b_HndUnfoldReq;         /* '<S3>/RRDoorHndReq' */
   boolean_T SO_b_HndFoldReq;           /* '<S3>/RRDoorHndReq' */
   boolean_T SO_b_HndUnfoldReq_a;       /* '<S3>/RLDoorHndReq' */
@@ -115,21 +111,21 @@ typedef struct {
   boolean_T SO_b_HndFoldReq_d;         /* '<S3>/FRDoorHndReq' */
   boolean_T SO_b_HndUnfoldReq_j;       /* '<S3>/FLDoorHndReq' */
   boolean_T SO_b_HndFoldReq_dm;        /* '<S3>/FLDoorHndReq' */
-  boolean_T SO_b_HallStall_m;          /* '<S14>/Stall' */
+  boolean_T SO_b_HallStall_m;          /* '<S12>/Stall' */
   Learn_Sts_E SO_m_LearnSts;           /* '<S17>/LearnLogic' */
-  Learn_Sts_E SO_m_LearnSts_b;         /* '<S14>/LearnLogic' */
+  Learn_Sts_E SO_m_LearnSts_b;         /* '<S12>/LearnLogic' */
 } B_DHM_T;
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct {
-  int16_T UnitDelay5_DSTATE;           /* '<S14>/Unit Delay5' */
+  int16_T UnitDelay5_DSTATE;           /* '<S12>/Unit Delay5' */
   int16_T UnitDelay5_DSTATE_h;         /* '<S17>/Unit Delay5' */
-  uint8_T UnitDelay1_DSTATE;           /* '<S14>/Unit Delay1' */
+  uint8_T UnitDelay1_DSTATE;           /* '<S12>/Unit Delay1' */
   uint8_T UnitDelay1_DSTATE_f;         /* '<S17>/Unit Delay1' */
-  boolean_T UnitDelay4_DSTATE;         /* '<S14>/Unit Delay4' */
+  boolean_T UnitDelay4_DSTATE;         /* '<S12>/Unit Delay4' */
   boolean_T UnitDelay4_DSTATE_n;       /* '<S17>/Unit Delay4' */
-  uint8_T is_active_c2_DHM;            /* '<S3>/Chart1' */
-  uint8_T is_active_c1_DHM;            /* '<S3>/Chart' */
+  uint8_T is_active_c2_DHM;            /* '<S3>/LearnSts' */
+  uint8_T is_active_c1_DHM;            /* '<S3>/HndReq' */
   DW_FLDoorHndReq_DHM_T sf_RRDoorHndReq;/* '<S3>/RRDoorHndReq' */
   DW_FLDoorHndReq_DHM_T sf_RLDoorHndReq;/* '<S3>/RLDoorHndReq' */
   DW_Stall_DHM_T sf_Stall_m;           /* '<S17>/Stall' */
@@ -139,11 +135,11 @@ typedef struct {
   DW_CtrlLogic_DHM_T sf_CtrlLogic_g;   /* '<S17>/CtrlLogic' */
   DW_FLDoorHndReq_DHM_T sf_FRDoorHndReq;/* '<S3>/FRDoorHndReq' */
   DW_FLDoorHndReq_DHM_T sf_FLDoorHndReq;/* '<S3>/FLDoorHndReq' */
-  DW_Stall_DHM_T sf_Stall;             /* '<S14>/Stall' */
-  DW_MotorLogic_DHM_T sf_MotorLogic;   /* '<S14>/MotorLogic' */
-  DW_LearnLogic_DHM_T sf_LearnLogic;   /* '<S14>/LearnLogic' */
-  DW_DoorHndPos_DHM_T sf_DoorHndPos;   /* '<S14>/DoorHndPos' */
-  DW_CtrlLogic_DHM_T sf_CtrlLogic;     /* '<S14>/CtrlLogic' */
+  DW_Stall_DHM_T sf_Stall;             /* '<S12>/Stall' */
+  DW_MotorLogic_DHM_T sf_MotorLogic;   /* '<S12>/MotorLogic' */
+  DW_LearnLogic_DHM_T sf_LearnLogic;   /* '<S12>/LearnLogic' */
+  DW_DoorHndPos_DHM_T sf_DoorHndPos;   /* '<S12>/DoorHndPos' */
+  DW_CtrlLogic_DHM_T sf_CtrlLogic;     /* '<S12>/CtrlLogic' */
 } DW_DHM_T;
 
 /* External inputs (root inport signals with default storage) */
@@ -269,19 +265,19 @@ extern RT_MODEL_DHM_T *const DHM_M;
  * '<S1>'   : 'DHM/DHM_Init'
  * '<S2>'   : 'DHM/DHM_Step_sys'
  * '<S3>'   : 'DHM/DHM_Step_sys/DHM'
- * '<S4>'   : 'DHM/DHM_Step_sys/DHM/Chart'
- * '<S5>'   : 'DHM/DHM_Step_sys/DHM/Chart1'
- * '<S6>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant1'
- * '<S7>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant2'
- * '<S8>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant3'
- * '<S9>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant4'
- * '<S10>'  : 'DHM/DHM_Step_sys/DHM/Compare To Constant5'
- * '<S11>'  : 'DHM/DHM_Step_sys/DHM/Compare To Constant6'
- * '<S12>'  : 'DHM/DHM_Step_sys/DHM/Compare To Constant7'
- * '<S13>'  : 'DHM/DHM_Step_sys/DHM/Compare To Constant8'
- * '<S14>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver'
- * '<S15>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndReq'
- * '<S16>'  : 'DHM/DHM_Step_sys/DHM/FRDoorHndReq'
+ * '<S4>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant1'
+ * '<S5>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant2'
+ * '<S6>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant3'
+ * '<S7>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant4'
+ * '<S8>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant5'
+ * '<S9>'   : 'DHM/DHM_Step_sys/DHM/Compare To Constant6'
+ * '<S10>'  : 'DHM/DHM_Step_sys/DHM/Compare To Constant7'
+ * '<S11>'  : 'DHM/DHM_Step_sys/DHM/Compare To Constant8'
+ * '<S12>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver'
+ * '<S13>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndReq'
+ * '<S14>'  : 'DHM/DHM_Step_sys/DHM/FRDoorHndReq'
+ * '<S15>'  : 'DHM/DHM_Step_sys/DHM/HndReq'
+ * '<S16>'  : 'DHM/DHM_Step_sys/DHM/LearnSts'
  * '<S17>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver'
  * '<S18>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndReq'
  * '<S19>'  : 'DHM/DHM_Step_sys/DHM/RRDoorHndReq'

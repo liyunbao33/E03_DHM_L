@@ -7,7 +7,7 @@
 %endfunction
 %function ChartDataMap(block, system) void
   %createrecord ChartDataElements {\
-    NumChartData   12 \
+    NumChartData   8 \
     ChartDataDefaults {\
       RecordType   "ChartData"\
       Dimensions   []\
@@ -53,34 +53,6 @@
       Description  "TemporalCounter"\
       SFName       ""\
       Path         ""\
-      SrcLocation  ""\
-    }\
-    ChartData {\
-      Name         "SI_m_DoorLockSts_prev"\
-      Description  "ChangeDetectionDoubleBuffer"\
-      SFName       ""\
-      Path         "SI_m_DoorLockSts"\
-      SrcLocation  ""\
-    }\
-    ChartData {\
-      Name         "SI_m_DoorLockSts_start"\
-      Description  "ChangeDetectionDoubleBuffer"\
-      SFName       ""\
-      Path         "SI_m_DoorLockSts"\
-      SrcLocation  ""\
-    }\
-    ChartData {\
-      Name         "SI_b_DoorOpen_prev"\
-      Description  "ChangeDetectionDoubleBuffer"\
-      SFName       ""\
-      Path         "SI_b_DoorOpen"\
-      SrcLocation  ""\
-    }\
-    ChartData {\
-      Name         "SI_b_DoorOpen_start"\
-      Description  "ChangeDetectionDoubleBuffer"\
-      SFName       ""\
-      Path         "SI_b_DoorOpen"\
       SrcLocation  ""\
     }\
     ChartData {\
