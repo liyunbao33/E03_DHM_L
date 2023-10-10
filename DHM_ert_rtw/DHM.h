@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.353
+ * Model version                  : 1.356
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Sun Oct  8 16:54:32 2023
+ * C/C++ source code generated on : Tue Oct 10 11:03:45 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -79,12 +79,17 @@ typedef struct {
 /* Block states (default storage) for system '<S3>/FLDoorHndReq' */
 typedef struct {
   uint8_T is_active_c4_DoorHndReq;     /* '<S3>/FLDoorHndReq' */
-  uint8_T is_Unfold;                   /* '<S3>/FLDoorHndReq' */
   uint8_T is_Fold;                     /* '<S3>/FLDoorHndReq' */
+  uint8_T is_Unfold;                   /* '<S3>/FLDoorHndReq' */
   uint8_T temporalCounter_i1;          /* '<S3>/FLDoorHndReq' */
   uint8_T temporalCounter_i2;          /* '<S3>/FLDoorHndReq' */
+  boolean_T SL_b_UnfoldReqTrig;        /* '<S3>/FLDoorHndReq' */
+  boolean_T SI_b_DoorOpen_prev;        /* '<S3>/FLDoorHndReq' */
+  boolean_T SI_b_DoorOpen_start;       /* '<S3>/FLDoorHndReq' */
   boolean_T SI_b_CrashOutpSts_prev;    /* '<S3>/FLDoorHndReq' */
   boolean_T SI_b_CrashOutpSts_start;   /* '<S3>/FLDoorHndReq' */
+  Door_Sts_E SI_m_DoorLockSts_prev;    /* '<S3>/FLDoorHndReq' */
+  Door_Sts_E SI_m_DoorLockSts_start;   /* '<S3>/FLDoorHndReq' */
 } DW_FLDoorHndReq_DHM_T;
 
 /* Block signals (default storage) */
