@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.358
+ * Model version                  : 1.361
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 10 17:14:02 2023
+ * C/C++ source code generated on : Thu Oct 12 18:52:58 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -40,6 +40,8 @@ typedef struct {
   uint8_T is_Unfold;                   /* '<S12>/CtrlLogic' */
   uint8_T is_Icebreak;                 /* '<S12>/CtrlLogic' */
   uint8_T is_Fold;                     /* '<S12>/CtrlLogic' */
+  uint8_T SL_e_CycleCount;             /* '<S12>/CtrlLogic' */
+  uint8_T SL_e_IceBrkCount;            /* '<S12>/CtrlLogic' */
   uint8_T temporalCounter_i1;          /* '<S12>/CtrlLogic' */
   boolean_T SI_b_DoorHndUnfoldReq_prev;/* '<S12>/CtrlLogic' */
   boolean_T SI_b_DoorHndUnfoldReq_start;/* '<S12>/CtrlLogic' */
@@ -54,11 +56,12 @@ typedef struct {
 
 /* Block states (default storage) for system '<S12>/LearnLogic' */
 typedef struct {
+  uint16_T temporalCounter_i1;         /* '<S12>/LearnLogic' */
   uint8_T is_active_c3_DoorHndDriver;  /* '<S12>/LearnLogic' */
   uint8_T is_c3_DoorHndDriver;         /* '<S12>/LearnLogic' */
   uint8_T is_LearnLogic;               /* '<S12>/LearnLogic' */
-  uint8_T SI_e_AutoLearnCount;         /* '<S12>/LearnLogic' */
-  uint8_T temporalCounter_i1;          /* '<S12>/LearnLogic' */
+  uint8_T SL_e_AutoLearnCount;         /* '<S12>/LearnLogic' */
+  uint8_T SL_e_tempPos;                /* '<S12>/LearnLogic' */
   boolean_T SI_b_LearnReq_prev;        /* '<S12>/LearnLogic' */
   boolean_T SI_b_LearnReq_start;       /* '<S12>/LearnLogic' */
 } DW_LearnLogic_DHM_T;
@@ -97,23 +100,25 @@ typedef struct {
   int16_T SO_s_MinSoftPos_n;           /* '<S12>/DoorHndPos' */
   int16_T SO_s_IceBrkPos_k;            /* '<S12>/DoorHndPos' */
   uint8_T SO_e_MotorCmd;               /* '<S17>/MotorLogic' */
-  uint8_T SO_e_MotorCmd_a;             /* '<S17>/LearnLogic' */
-  uint8_T SO_e_MotorPwm_e;             /* '<S17>/LearnLogic' */
+  uint8_T SO_e_LearnMotorCmd;          /* '<S17>/LearnLogic' */
+  uint8_T SO_e_LearnMotorPwm;          /* '<S17>/LearnLogic' */
   uint8_T SO_e_MotorCmd_c;             /* '<S12>/MotorLogic' */
-  uint8_T SO_e_MotorCmd_j;             /* '<S12>/LearnLogic' */
-  uint8_T SO_e_MotorPwm_m;             /* '<S12>/LearnLogic' */
+  uint8_T SO_e_LearnMotorCmd_f;        /* '<S12>/LearnLogic' */
+  uint8_T SO_e_LearnMotorPwm_p;        /* '<S12>/LearnLogic' */
   boolean_T SO_b_HndUnfoldReq;         /* '<S3>/RRDoorHndReq' */
   boolean_T SO_b_HndFoldReq;           /* '<S3>/RRDoorHndReq' */
   boolean_T SO_b_HndUnfoldReq_a;       /* '<S3>/RLDoorHndReq' */
   boolean_T SO_b_HndFoldReq_a;         /* '<S3>/RLDoorHndReq' */
   boolean_T SO_b_HallStall;            /* '<S17>/Stall' */
+  boolean_T SO_b_Learning;             /* '<S17>/LearnLogic' */
   boolean_T SO_b_HndUnfoldReq_k;       /* '<S3>/FRDoorHndReq' */
   boolean_T SO_b_HndFoldReq_d;         /* '<S3>/FRDoorHndReq' */
   boolean_T SO_b_HndUnfoldReq_j;       /* '<S3>/FLDoorHndReq' */
   boolean_T SO_b_HndFoldReq_dm;        /* '<S3>/FLDoorHndReq' */
   boolean_T SO_b_HallStall_m;          /* '<S12>/Stall' */
+  boolean_T SO_b_Learning_j;           /* '<S12>/LearnLogic' */
   Learn_Sts_E SO_m_LearnSts;           /* '<S17>/LearnLogic' */
-  Learn_Sts_E SO_m_LearnSts_b;         /* '<S12>/LearnLogic' */
+  Learn_Sts_E SO_m_LearnSts_e;         /* '<S12>/LearnLogic' */
 } B_DHM_T;
 
 /* Block states (default storage) for system '<Root>' */
@@ -122,8 +127,6 @@ typedef struct {
   int16_T UnitDelay5_DSTATE_h;         /* '<S17>/Unit Delay5' */
   uint8_T UnitDelay1_DSTATE;           /* '<S12>/Unit Delay1' */
   uint8_T UnitDelay1_DSTATE_f;         /* '<S17>/Unit Delay1' */
-  boolean_T UnitDelay4_DSTATE;         /* '<S12>/Unit Delay4' */
-  boolean_T UnitDelay4_DSTATE_n;       /* '<S17>/Unit Delay4' */
   uint8_T is_active_c2_DHM;            /* '<S3>/LearnSts' */
   uint8_T is_active_c1_DHM;            /* '<S3>/HndReq' */
   DW_FLDoorHndReq_DHM_T sf_RRDoorHndReq;/* '<S3>/RRDoorHndReq' */
