@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.361
+ * Model version                  : 1.374
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Thu Oct 12 18:52:58 2023
+ * C/C++ source code generated on : Sun Oct 15 23:24:25 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -15,8 +15,8 @@
 
 #include "DHM.h"
 #include "rtwtypes.h"
-#include "Rte_Type.h"
 #include "DHM_types.h"
+#include "Rte_Type.h"
 #include "DHM_private.h"
 
 /* Named constants for Chart: '<S12>/CtrlLogic' */
@@ -41,6 +41,10 @@
 #define DHM_IN_Stop_e                  ((uint8_T)5U)
 #define DHM_IN_Unfold                  ((uint8_T)5U)
 
+/* Named constants for Chart: '<S12>/DoorHndPos' */
+#define DHM_IN_GetSoftPos              ((uint8_T)1U)
+#define DHM_IN_PowerOn                 ((uint8_T)2U)
+
 /* Named constants for Chart: '<S12>/LearnLogic' */
 #define DHM_IN_Check_a                 ((uint8_T)1U)
 #define DHM_IN_CorrectZeroPos          ((uint8_T)2U)
@@ -51,7 +55,7 @@
 #define DHM_IN_GotoZeroPos             ((uint8_T)7U)
 #define DHM_IN_Idle_j                  ((uint8_T)8U)
 #define DHM_IN_LearnLogic              ((uint8_T)1U)
-#define DHM_IN_PowerOn                 ((uint8_T)2U)
+#define DHM_IN_PowerOn_b               ((uint8_T)2U)
 
 /* Named constants for Chart: '<S12>/Stall' */
 #define DHM_IN_Checking                ((uint8_T)1U)
@@ -81,18 +85,20 @@ static RT_MODEL_DHM_T DHM_M_;
 RT_MODEL_DHM_T *const DHM_M = &DHM_M_;
 
 /* Forward declaration for local functions */
-static void DHM_Unfold(SInt16 rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxSoftPos,
+static void DHM_Unfold(int16_T rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxSoftPos,
   int16_T rtu_SI_s_IceBrkPos, boolean_T rtu_SI_b_Learning, uint8_T
   *rty_SO_e_MotorCmd, uint8_T *rty_SO_e_MotorPwm, boolean_T *rty_SO_b_Error,
   DW_CtrlLogic_DHM_T *localDW);
 
 /* Forward declaration for local functions */
+static void DHM_GetCurrenPos(real_T *CurrentPos, SInt16 rtu_SI_s_HallCount,
+  DW_DoorHndPos_DHM_T *localDW);
 static real_T DHM_GetPosSts(real_T CurrentPos, real_T MinSoftPos, real_T
   MaxSoftPos);
 static uint8_T DHM_safe_cast_to_HndPos_Sts_E(uint8_T input);
 
 /* Function for Chart: '<S12>/CtrlLogic' */
-static void DHM_Unfold(SInt16 rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxSoftPos,
+static void DHM_Unfold(int16_T rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxSoftPos,
   int16_T rtu_SI_s_IceBrkPos, boolean_T rtu_SI_b_Learning, uint8_T
   *rty_SO_e_MotorCmd, uint8_T *rty_SO_e_MotorPwm, boolean_T *rty_SO_b_Error,
   DW_CtrlLogic_DHM_T *localDW)
@@ -273,7 +279,7 @@ void DHM_CtrlLogic_Init(uint8_T *rty_SO_e_MotorCmd, uint8_T *rty_SO_e_MotorPwm,
  *    '<S12>/CtrlLogic'
  *    '<S17>/CtrlLogic'
  */
-void DHM_CtrlLogic(SInt16 rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxSoftPos,
+void DHM_CtrlLogic(int16_T rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxSoftPos,
                    int16_T rtu_SI_s_MinSoftPos, int16_T rtu_SI_s_IceBrkPos,
                    boolean_T rtu_SI_b_DoorHndFoldReq, boolean_T
                    rtu_SI_b_DoorHndUnfoldReq, Learn_Sts_E rtu_SI_m_LearnSts,
@@ -486,19 +492,41 @@ void DHM_CtrlLogic(SInt16 rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxSoftPos,
 }
 
 /* Function for Chart: '<S12>/DoorHndPos' */
+static void DHM_GetCurrenPos(real_T *CurrentPos, SInt16 rtu_SI_s_HallCount,
+  DW_DoorHndPos_DHM_T *localDW)
+{
+  int32_T tmp;
+  tmp = rtu_SI_s_HallCount - localDW->SL_s_TempHallCount;
+  if (tmp > 32767) {
+    tmp = 32767;
+  } else if (tmp < -32768) {
+    tmp = -32768;
+  }
+
+  localDW->SL_s_TempHallCount = rtu_SI_s_HallCount;
+  if ((localDW->SI_b_CorrectPosToZero_prev !=
+       localDW->SI_b_CorrectPosToZero_start) &&
+      localDW->SI_b_CorrectPosToZero_start) {
+    *CurrentPos = 0.0;
+  }
+
+  *CurrentPos += (real_T)(int16_T)tmp;
+}
+
+/* Function for Chart: '<S12>/DoorHndPos' */
 static real_T DHM_GetPosSts(real_T CurrentPos, real_T MinSoftPos, real_T
   MaxSoftPos)
 {
-  real_T y;
+  real_T HndSts;
   if (CurrentPos <= MinSoftPos) {
-    y = 0.0;
+    HndSts = 0.0;
   } else if (CurrentPos >= MaxSoftPos) {
-    y = 1.0;
+    HndSts = 1.0;
   } else {
-    y = 2.0;
+    HndSts = 2.0;
   }
 
-  return y;
+  return HndSts;
 }
 
 static uint8_T DHM_safe_cast_to_HndPos_Sts_E(uint8_T input)
@@ -522,12 +550,13 @@ static uint8_T DHM_safe_cast_to_HndPos_Sts_E(uint8_T input)
  */
 void DHM_DoorHndPos_Init(HndPos_Sts_E *rty_SO_m_DoorHndPosSts, int16_T
   *rty_SO_s_MaxSoftPos, int16_T *rty_SO_s_MinSoftPos, int16_T
-  *rty_SO_s_IceBrkPos)
+  *rty_SO_s_IceBrkPos, int16_T *rty_SO_s_CurrentPos)
 {
   *rty_SO_m_DoorHndPosSts = Hnd_Fold;
   *rty_SO_s_MaxSoftPos = 0;
   *rty_SO_s_MinSoftPos = 0;
   *rty_SO_s_IceBrkPos = 0;
+  *rty_SO_s_CurrentPos = 0;
 }
 
 /*
@@ -535,26 +564,39 @@ void DHM_DoorHndPos_Init(HndPos_Sts_E *rty_SO_m_DoorHndPosSts, int16_T
  *    '<S12>/DoorHndPos'
  *    '<S17>/DoorHndPos'
  */
-void DHM_DoorHndPos(SInt16 rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxPos,
+void DHM_DoorHndPos(SInt16 rtu_SI_s_HallCount, int16_T rtu_SI_s_CurrentPosFromEE,
+                    int16_T rtu_SI_s_MaxPos, boolean_T rtu_SI_b_CorrectPosToZero,
                     Learn_Sts_E rtu_SI_m_LearnSts, HndPos_Sts_E
                     *rty_SO_m_DoorHndPosSts, int16_T *rty_SO_s_MaxSoftPos,
                     int16_T *rty_SO_s_MinSoftPos, int16_T *rty_SO_s_IceBrkPos,
-                    DW_DoorHndPos_DHM_T *localDW)
+                    int16_T *rty_SO_s_CurrentPos, DW_DoorHndPos_DHM_T *localDW)
 {
+  real_T c;
+  if (localDW->temporalCounter_i1 < 63U) {
+    localDW->temporalCounter_i1++;
+  }
+
+  localDW->SI_b_CorrectPosToZero_prev = localDW->SI_b_CorrectPosToZero_start;
+  localDW->SI_b_CorrectPosToZero_start = rtu_SI_b_CorrectPosToZero;
+
   /* Chart: '<S12>/DoorHndPos' */
   if (localDW->is_active_c5_DoorHndDriver == 0U) {
+    localDW->SI_b_CorrectPosToZero_prev = rtu_SI_b_CorrectPosToZero;
     localDW->is_active_c5_DoorHndDriver = 1U;
+    localDW->is_c5_DoorHndDriver = DHM_IN_PowerOn;
+    localDW->temporalCounter_i1 = 0U;
+    *rty_SO_s_CurrentPos = rtu_SI_s_CurrentPosFromEE;
+  } else if (localDW->is_c5_DoorHndDriver == DHM_IN_GetSoftPos) {
     if (rtu_SI_m_LearnSts == Learn_Success) {
-      real_T tmp;
       *rty_SO_s_MaxSoftPos = (int16_T)(rtu_SI_s_MaxPos * 95 / 100);
       *rty_SO_s_MinSoftPos = (int16_T)(rtu_SI_s_MaxPos * 5 / 100);
       *rty_SO_s_IceBrkPos = (int16_T)(rtu_SI_s_MaxPos * 20 / 100);
-      tmp = DHM_GetPosSts((real_T)rtu_SI_s_CurrentPos, (real_T)
-                          *rty_SO_s_MinSoftPos, (real_T)*rty_SO_s_MaxSoftPos);
-      if (tmp < 2.147483648E+9) {
-        if (tmp >= -2.147483648E+9) {
+      c = DHM_GetPosSts((real_T)*rty_SO_s_CurrentPos, (real_T)
+                        *rty_SO_s_MinSoftPos, (real_T)*rty_SO_s_MaxSoftPos);
+      if (c < 2.147483648E+9) {
+        if (c >= -2.147483648E+9) {
           *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E((uint8_T)
-            (int32_T)tmp);
+            (int32_T)c);
         } else {
           *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E(0);
         }
@@ -564,25 +606,56 @@ void DHM_DoorHndPos(SInt16 rtu_SI_s_CurrentPos, int16_T rtu_SI_s_MaxPos,
     } else {
       *rty_SO_m_DoorHndPosSts = Hnd_Unknown;
     }
-  } else if (rtu_SI_m_LearnSts == Learn_Success) {
-    real_T tmp;
-    *rty_SO_s_MaxSoftPos = (int16_T)(rtu_SI_s_MaxPos * 95 / 100);
-    *rty_SO_s_MinSoftPos = (int16_T)(rtu_SI_s_MaxPos * 5 / 100);
-    *rty_SO_s_IceBrkPos = (int16_T)(rtu_SI_s_MaxPos * 20 / 100);
-    tmp = DHM_GetPosSts((real_T)rtu_SI_s_CurrentPos, (real_T)
-                        *rty_SO_s_MinSoftPos, (real_T)*rty_SO_s_MaxSoftPos);
-    if (tmp < 2.147483648E+9) {
-      if (tmp >= -2.147483648E+9) {
-        *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E((uint8_T)
-          (int32_T)tmp);
+
+    c = *rty_SO_s_CurrentPos;
+    DHM_GetCurrenPos(&c, rtu_SI_s_HallCount, localDW);
+    if (c < 32768.0) {
+      if (c >= -32768.0) {
+        *rty_SO_s_CurrentPos = (int16_T)c;
       } else {
-        *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E(0);
+        *rty_SO_s_CurrentPos = MIN_int16_T;
       }
     } else {
-      *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E(MAX_uint8_T);
+      *rty_SO_s_CurrentPos = MAX_int16_T;
+    }
+
+    /* case IN_PowerOn: */
+  } else if (localDW->temporalCounter_i1 >= 50) {
+    /*  500ms内读取E2当前位置  */
+    localDW->is_c5_DoorHndDriver = DHM_IN_GetSoftPos;
+    if (rtu_SI_m_LearnSts == Learn_Success) {
+      *rty_SO_s_MaxSoftPos = (int16_T)(rtu_SI_s_MaxPos * 95 / 100);
+      *rty_SO_s_MinSoftPos = (int16_T)(rtu_SI_s_MaxPos * 5 / 100);
+      *rty_SO_s_IceBrkPos = (int16_T)(rtu_SI_s_MaxPos * 20 / 100);
+      c = DHM_GetPosSts((real_T)*rty_SO_s_CurrentPos, (real_T)
+                        *rty_SO_s_MinSoftPos, (real_T)*rty_SO_s_MaxSoftPos);
+      if (c < 2.147483648E+9) {
+        if (c >= -2.147483648E+9) {
+          *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E((uint8_T)
+            (int32_T)c);
+        } else {
+          *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E(0);
+        }
+      } else {
+        *rty_SO_m_DoorHndPosSts = DHM_safe_cast_to_HndPos_Sts_E(MAX_uint8_T);
+      }
+    } else {
+      *rty_SO_m_DoorHndPosSts = Hnd_Unknown;
+    }
+
+    c = *rty_SO_s_CurrentPos;
+    DHM_GetCurrenPos(&c, rtu_SI_s_HallCount, localDW);
+    if (c < 32768.0) {
+      if (c >= -32768.0) {
+        *rty_SO_s_CurrentPos = (int16_T)c;
+      } else {
+        *rty_SO_s_CurrentPos = MIN_int16_T;
+      }
+    } else {
+      *rty_SO_s_CurrentPos = MAX_int16_T;
     }
   } else {
-    *rty_SO_m_DoorHndPosSts = Hnd_Unknown;
+    *rty_SO_s_CurrentPos = rtu_SI_s_CurrentPosFromEE;
   }
 
   /* End of Chart: '<S12>/DoorHndPos' */
@@ -611,9 +684,9 @@ void DHM_LearnLogic_Init(uint8_T *rty_SO_e_LearnMotorCmd, uint8_T
  *    '<S17>/LearnLogic'
  */
 void DHM_LearnLogic(boolean_T rtu_SI_b_HallStall, Boolean rtu_SI_b_LearnReq,
-                    Learn_Sts_E rtu_SI_m_LearnStsFromEE, int16_T
-                    rtu_SI_s_MaxPosFromEE, SInt16 rtu_SI_s_CurrentPos, uint8_T
-                    *rty_SO_e_LearnMotorCmd, uint8_T *rty_SO_e_LearnMotorPwm,
+                    Learn_Sts_E rtu_SI_m_LearnStsFromEE, SInt16
+                    rtu_SI_s_MaxPosFromEE, int16_T rtu_SI_s_CurrentPos, uint8_T *
+                    rty_SO_e_LearnMotorCmd, uint8_T *rty_SO_e_LearnMotorPwm,
                     boolean_T *rty_SO_b_CorrectPosToZero, Learn_Sts_E
                     *rty_SO_m_LearnSts, int16_T *rty_SO_s_MaxPos, boolean_T
                     *rty_SO_b_Learning, DW_LearnLogic_DHM_T *localDW)
@@ -629,7 +702,7 @@ void DHM_LearnLogic(boolean_T rtu_SI_b_HallStall, Boolean rtu_SI_b_LearnReq,
   if (localDW->is_active_c3_DoorHndDriver == 0U) {
     localDW->SI_b_LearnReq_prev = rtu_SI_b_LearnReq;
     localDW->is_active_c3_DoorHndDriver = 1U;
-    localDW->is_c3_DoorHndDriver = DHM_IN_PowerOn;
+    localDW->is_c3_DoorHndDriver = DHM_IN_PowerOn_b;
     localDW->temporalCounter_i1 = 0U;
     localDW->SL_e_AutoLearnCount = 2U;
 
@@ -641,8 +714,7 @@ void DHM_LearnLogic(boolean_T rtu_SI_b_HallStall, Boolean rtu_SI_b_LearnReq,
     guard1 = false;
     switch (localDW->is_LearnLogic) {
      case DHM_IN_Check_a:
-      /*   */
-      if ((rtu_SI_s_CurrentPos == 0) && (*rty_SO_s_MaxPos > 400)) {
+      if (*rty_SO_s_MaxPos > 400) {
         localDW->is_LearnLogic = DHM_IN_Finished;
         localDW->temporalCounter_i1 = 0U;
 
@@ -890,8 +962,8 @@ void DHM_Stall_Init(boolean_T *rty_SO_b_HallStall)
  *    '<S12>/Stall'
  *    '<S17>/Stall'
  */
-void DHM_Stall(SInt16 rtu_SI_s_CurrentPos, uint8_T rtu_SI_e_MotorCmd, boolean_T *
-               rty_SO_b_HallStall, DW_Stall_DHM_T *localDW)
+void DHM_Stall(int16_T rtu_SI_s_CurrentPos, uint8_T rtu_SI_e_MotorCmd, boolean_T
+               *rty_SO_b_HallStall, DW_Stall_DHM_T *localDW)
 {
   if (localDW->temporalCounter_i1 < 31U) {
     localDW->temporalCounter_i1++;
@@ -1066,13 +1138,11 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   Door_Sts_E rtb_DataTypeConversion7;
   HndPos_Sts_E rtb_DataTypeConversion4;
   HndPos_Sts_E rtb_DataTypeConversion6;
-  HndPos_Sts_E rtb_SO_m_DoorHndPosSts;
-  HndPos_Sts_E rtb_SO_m_DoorHndPosSts_h;
   uint8_T SO_e_MotorCmd_g;
   uint8_T SO_e_MotorPwm_e;
   uint8_T SO_e_MotorPwm_k;
-  boolean_T SO_b_CorrectPosToZero_j;
   boolean_T SO_b_Error_f;
+  boolean_T rtb_LogicalOperator1;
 
   /* RootInportFunctionCallGenerator generated from: '<Root>/DHM_Step' incorporates:
    *  SubSystem: '<Root>/DHM_Step_sys'
@@ -1096,16 +1166,17 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
 
   /* Chart: '<S12>/LearnLogic' incorporates:
    *  Inport: '<Root>/VeINP_EPRM_FLDoorHandleLrnStsEE_sig_VeINP_EPRM_FLDoorHandleLrnStsEE_sig'
-   *  Inport: '<Root>/VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig'
+   *  Inport: '<Root>/VsINP_EPRM_FLDoorHandleFromEE_sig_VsINP_EPRM_FLDoorHandleFromEE_sig'
    *  Outport: '<Root>/VbOUT_DHM_DoorHandleLrnReq_flg_VbOUT_DHM_DoorHandleLrnReq_flg'
    *  Outport: '<Root>/VsINP_DHM_FLDoorHandleEE_sig_VsINP_DHM_FLDoorHandleEE_sig'
    *  UnitDelay: '<S12>/Unit Delay'
+   *  UnitDelay: '<S12>/Unit Delay3'
    */
   DHM_LearnLogic(DHM_B.SO_b_HallStall_m, DHM_Y.VbOUT_DHM_DoorHandleLrnReq_flg_,
-                 DHM_U.VeINP_EPRM_FLDoorHandleLrnStsEE, 0,
-                 DHM_U.VsINP_HWA_DriverHandleHall_sig_,
+                 DHM_U.VeINP_EPRM_FLDoorHandleLrnStsEE,
+                 DHM_U.VsINP_EPRM_FLDoorHandleFromEE_s, DHM_B.SO_s_CurrentPos_n,
                  &DHM_B.SO_e_LearnMotorCmd_f, &DHM_B.SO_e_LearnMotorPwm_p,
-                 &SO_b_CorrectPosToZero_j, &DHM_B.SO_m_LearnSts_e,
+                 &DHM_B.SO_b_CorrectPosToZero_j, &DHM_B.SO_m_LearnSts_e,
                  &DHM_Y.VsINP_DHM_FLDoorHandleEE_sig_Vs, &DHM_B.SO_b_Learning_j,
                  &DHM_DW.sf_LearnLogic);
 
@@ -1116,16 +1187,17 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
 
   /* Chart: '<S17>/LearnLogic' incorporates:
    *  Inport: '<Root>/VeINP_EPRM_RLDoorHandleLrnStsEE_sig_VeINP_EPRM_RLDoorHandleLrnStsEE_sig'
-   *  Inport: '<Root>/VsINP_HWA_RLHandleHall_sig_VsINP_HWA_RLHandleHall_sig'
+   *  Inport: '<Root>/VsINP_EPRM_RLDoorHandleFromEE_sig_VsINP_EPRM_RLDoorHandleFromEE_sig'
    *  Outport: '<Root>/VbOUT_DHM_DoorHandleLrnReq_flg_VbOUT_DHM_DoorHandleLrnReq_flg'
    *  Outport: '<Root>/VsINP_DHM_RLDoorHandleEE_sig_VsINP_DHM_RLDoorHandleEE_sig'
    *  UnitDelay: '<S17>/Unit Delay'
+   *  UnitDelay: '<S17>/Unit Delay3'
    */
   DHM_LearnLogic(DHM_B.SO_b_HallStall, DHM_Y.VbOUT_DHM_DoorHandleLrnReq_flg_,
-                 DHM_U.VeINP_EPRM_RLDoorHandleLrnStsEE, 0,
-                 DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN,
+                 DHM_U.VeINP_EPRM_RLDoorHandleLrnStsEE,
+                 DHM_U.VsINP_EPRM_RLDoorHandleFromEE_s, DHM_B.SO_s_CurrentPos,
                  &DHM_B.SO_e_LearnMotorCmd, &DHM_B.SO_e_LearnMotorPwm,
-                 &SO_b_CorrectPosToZero_j, &DHM_B.SO_m_LearnSts,
+                 &DHM_B.SO_b_CorrectPosToZero, &DHM_B.SO_m_LearnSts,
                  &DHM_Y.VsINP_DHM_RLDoorHandleEE_sig_Vs, &DHM_B.SO_b_Learning,
                  &DHM_DW.sf_LearnLogic_d);
 
@@ -1147,32 +1219,37 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
 
   /* Chart: '<S12>/DoorHndPos' incorporates:
    *  Inport: '<Root>/VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig'
+   *  UnitDelay: '<S12>/Unit Delay2'
    *  UnitDelay: '<S12>/Unit Delay5'
    */
-  DHM_DoorHndPos(DHM_U.VsINP_HWA_DriverHandleHall_sig_, DHM_DW.UnitDelay5_DSTATE,
-                 DHM_B.SO_m_LearnSts_e, &rtb_SO_m_DoorHndPosSts_h,
+  DHM_DoorHndPos(DHM_U.VsINP_HWA_DriverHandleHall_sig_, 0,
+                 DHM_DW.UnitDelay5_DSTATE, DHM_DW.UnitDelay2_DSTATE,
+                 DHM_B.SO_m_LearnSts_e, &DHM_B.SO_m_DoorHndPosSts_i,
                  &DHM_B.SO_s_MaxSoftPos_k, &DHM_B.SO_s_MinSoftPos_n,
-                 &DHM_B.SO_s_IceBrkPos_k, &DHM_DW.sf_DoorHndPos);
+                 &DHM_B.SO_s_IceBrkPos_k, &DHM_B.SO_s_CurrentPos_n,
+                 &DHM_DW.sf_DoorHndPos);
 
   /* Outport: '<Root>/VeOUT_DHM_FLHandleFoldedStatus_sig_VeOUT_DHM_FLHandleFoldedStatus_sig' incorporates:
    *  DataTypeConversion: '<S3>/Data Type Conversion3'
    */
-  DHM_Y.VeOUT_DHM_FLHandleFoldedStatus_ = rtb_SO_m_DoorHndPosSts_h;
+  DHM_Y.VeOUT_DHM_FLHandleFoldedStatus_ = DHM_B.SO_m_DoorHndPosSts_i;
 
   /* Chart: '<S17>/DoorHndPos' incorporates:
    *  Inport: '<Root>/VsINP_HWA_RLHandleHall_sig_VsINP_HWA_RLHandleHall_sig'
+   *  UnitDelay: '<S17>/Unit Delay2'
    *  UnitDelay: '<S17>/Unit Delay5'
    */
-  DHM_DoorHndPos(DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN,
-                 DHM_DW.UnitDelay5_DSTATE_h, DHM_B.SO_m_LearnSts,
-                 &rtb_SO_m_DoorHndPosSts, &DHM_B.SO_s_MaxSoftPos,
-                 &DHM_B.SO_s_MinSoftPos, &DHM_B.SO_s_IceBrkPos,
+  DHM_DoorHndPos(DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN, 0,
+                 DHM_DW.UnitDelay5_DSTATE_h, DHM_DW.UnitDelay2_DSTATE_k,
+                 DHM_B.SO_m_LearnSts, &DHM_B.SO_m_DoorHndPosSts,
+                 &DHM_B.SO_s_MaxSoftPos, &DHM_B.SO_s_MinSoftPos,
+                 &DHM_B.SO_s_IceBrkPos, &DHM_B.SO_s_CurrentPos,
                  &DHM_DW.sf_DoorHndPos_m);
 
   /* Outport: '<Root>/VeOUT_DHM_RLHandleFoldedStatus_sig_VeOUT_DHM_RLHandleFoldedStatus_sig' incorporates:
    *  DataTypeConversion: '<S3>/Data Type Conversion5'
    */
-  DHM_Y.VeOUT_DHM_RLHandleFoldedStatus_ = rtb_SO_m_DoorHndPosSts;
+  DHM_Y.VeOUT_DHM_RLHandleFoldedStatus_ = DHM_B.SO_m_DoorHndPosSts;
 
   /* DataTypeConversion: '<S3>/Data Type Conversion7' incorporates:
    *  Inport: '<Root>/VeOUT_DLK_LHFDoorLockSts_sig_VeOUT_DLK_LHFDoorLockSts_sig'
@@ -1205,7 +1282,7 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
    *  RelationalOperator: '<S8>/Compare'
    *  RelationalOperator: '<S9>/Compare'
    */
-  SO_b_CorrectPosToZero_j = ((DHM_U.VeOUT_SP_LHFdoorSts_sig_VeOUT_S == 1) ||
+  rtb_LogicalOperator1 = ((DHM_U.VeOUT_SP_LHFdoorSts_sig_VeOUT_S == 1) ||
     (DHM_U.VeOUT_SP_LHFdoorSts_sig_VeOUT_S == 2) ||
     ((DHM_U.VeOUT_SP_LHRdoorSts_sig_VeOUT_S == 1) ||
      (DHM_U.VeOUT_SP_LHRdoorSts_sig_VeOUT_S == 2)) ||
@@ -1219,15 +1296,13 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
    *  Inport: '<Root>/VeOUT_SP_EspVehSpd_kmh_VeOUT_SP_EspVehSpd_kmh'
    */
   DHM_FLDoorHndReq(DHM_U.VbOUT_SP_CrashOutpSts_flg_VbOUT,
-                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP,
-                   SO_b_CorrectPosToZero_j, rtb_DataTypeConversion7,
-                   rtb_SO_m_DoorHndPosSts_h, &DHM_B.SO_b_HndUnfoldReq_j,
-                   &DHM_B.SO_b_HndFoldReq_dm, &DHM_DW.sf_FLDoorHndReq);
+                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP, rtb_LogicalOperator1,
+                   rtb_DataTypeConversion7, DHM_B.SO_m_DoorHndPosSts_i,
+                   &DHM_B.SO_b_HndUnfoldReq_j, &DHM_B.SO_b_HndFoldReq_dm,
+                   &DHM_DW.sf_FLDoorHndReq);
 
-  /* Chart: '<S12>/CtrlLogic' incorporates:
-   *  Inport: '<Root>/VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig'
-   */
-  DHM_CtrlLogic(DHM_U.VsINP_HWA_DriverHandleHall_sig_, DHM_B.SO_s_MaxSoftPos_k,
+  /* Chart: '<S12>/CtrlLogic' */
+  DHM_CtrlLogic(DHM_B.SO_s_CurrentPos_n, DHM_B.SO_s_MaxSoftPos_k,
                 DHM_B.SO_s_MinSoftPos_n, DHM_B.SO_s_IceBrkPos_k,
                 DHM_B.SO_b_HndFoldReq_dm, DHM_B.SO_b_HndUnfoldReq_j,
                 DHM_B.SO_m_LearnSts_e, DHM_B.SO_b_Learning_j, &SO_e_MotorCmd_g,
@@ -1242,10 +1317,9 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
                  &DHM_DW.sf_MotorLogic);
 
   /* Chart: '<S12>/Stall' incorporates:
-   *  Inport: '<Root>/VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig'
    *  UnitDelay: '<S12>/Unit Delay1'
    */
-  DHM_Stall(DHM_U.VsINP_HWA_DriverHandleHall_sig_, DHM_DW.UnitDelay1_DSTATE,
+  DHM_Stall(DHM_B.SO_s_CurrentPos_n, DHM_DW.UnitDelay1_DSTATE,
             &DHM_B.SO_b_HallStall_m, &DHM_DW.sf_Stall);
 
   /* Chart: '<S3>/FRDoorHndReq' incorporates:
@@ -1253,20 +1327,20 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
    *  Inport: '<Root>/VeOUT_SP_EspVehSpd_kmh_VeOUT_SP_EspVehSpd_kmh'
    */
   DHM_FLDoorHndReq(DHM_U.VbOUT_SP_CrashOutpSts_flg_VbOUT,
-                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP,
-                   SO_b_CorrectPosToZero_j, rtb_DataTypeConversion7,
-                   rtb_DataTypeConversion4, &DHM_B.SO_b_HndUnfoldReq_k,
-                   &DHM_B.SO_b_HndFoldReq_d, &DHM_DW.sf_FRDoorHndReq);
+                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP, rtb_LogicalOperator1,
+                   rtb_DataTypeConversion7, rtb_DataTypeConversion4,
+                   &DHM_B.SO_b_HndUnfoldReq_k, &DHM_B.SO_b_HndFoldReq_d,
+                   &DHM_DW.sf_FRDoorHndReq);
 
   /* Chart: '<S3>/RRDoorHndReq' incorporates:
    *  Inport: '<Root>/VbOUT_SP_CrashOutpSts_flg_VbOUT_SP_CrashOutpSts_flg'
    *  Inport: '<Root>/VeOUT_SP_EspVehSpd_kmh_VeOUT_SP_EspVehSpd_kmh'
    */
   DHM_FLDoorHndReq(DHM_U.VbOUT_SP_CrashOutpSts_flg_VbOUT,
-                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP,
-                   SO_b_CorrectPosToZero_j, rtb_DataTypeConversion7,
-                   rtb_DataTypeConversion6, &DHM_B.SO_b_HndUnfoldReq,
-                   &DHM_B.SO_b_HndFoldReq, &DHM_DW.sf_RRDoorHndReq);
+                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP, rtb_LogicalOperator1,
+                   rtb_DataTypeConversion7, rtb_DataTypeConversion6,
+                   &DHM_B.SO_b_HndUnfoldReq, &DHM_B.SO_b_HndFoldReq,
+                   &DHM_DW.sf_RRDoorHndReq);
 
   /* Chart: '<S3>/HndReq' */
   if (DHM_DW.is_active_c1_DHM == 0U) {
@@ -1312,20 +1386,17 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
    *  Inport: '<Root>/VeOUT_SP_EspVehSpd_kmh_VeOUT_SP_EspVehSpd_kmh'
    */
   DHM_FLDoorHndReq(DHM_U.VbOUT_SP_CrashOutpSts_flg_VbOUT,
-                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP,
-                   SO_b_CorrectPosToZero_j, rtb_DataTypeConversion7,
-                   rtb_SO_m_DoorHndPosSts, &DHM_B.SO_b_HndUnfoldReq_a,
-                   &DHM_B.SO_b_HndFoldReq_a, &DHM_DW.sf_RLDoorHndReq);
+                   DHM_U.VeOUT_SP_EspVehSpd_kmh_VeOUT_SP, rtb_LogicalOperator1,
+                   rtb_DataTypeConversion7, DHM_B.SO_m_DoorHndPosSts,
+                   &DHM_B.SO_b_HndUnfoldReq_a, &DHM_B.SO_b_HndFoldReq_a,
+                   &DHM_DW.sf_RLDoorHndReq);
 
-  /* Chart: '<S17>/CtrlLogic' incorporates:
-   *  Inport: '<Root>/VsINP_HWA_RLHandleHall_sig_VsINP_HWA_RLHandleHall_sig'
-   */
-  DHM_CtrlLogic(DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN, DHM_B.SO_s_MaxSoftPos,
+  /* Chart: '<S17>/CtrlLogic' */
+  DHM_CtrlLogic(DHM_B.SO_s_CurrentPos, DHM_B.SO_s_MaxSoftPos,
                 DHM_B.SO_s_MinSoftPos, DHM_B.SO_s_IceBrkPos,
                 DHM_B.SO_b_HndUnfoldReq_a, DHM_B.SO_b_HndFoldReq_a,
                 DHM_B.SO_m_LearnSts, DHM_B.SO_b_Learning, &SO_e_MotorCmd_g,
-                &SO_e_MotorPwm_e, &SO_b_CorrectPosToZero_j,
-                &DHM_DW.sf_CtrlLogic_g);
+                &SO_e_MotorPwm_e, &rtb_LogicalOperator1, &DHM_DW.sf_CtrlLogic_g);
 
   /* Chart: '<S17>/MotorLogic' incorporates:
    *  Outport: '<Root>/VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg'
@@ -1336,10 +1407,9 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
                  &DHM_DW.sf_MotorLogic_l);
 
   /* Chart: '<S17>/Stall' incorporates:
-   *  Inport: '<Root>/VsINP_HWA_RLHandleHall_sig_VsINP_HWA_RLHandleHall_sig'
    *  UnitDelay: '<S17>/Unit Delay1'
    */
-  DHM_Stall(DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN, DHM_DW.UnitDelay1_DSTATE_f,
+  DHM_Stall(DHM_B.SO_s_CurrentPos, DHM_DW.UnitDelay1_DSTATE_f,
             &DHM_B.SO_b_HallStall, &DHM_DW.sf_Stall_m);
 
   /* Update for UnitDelay: '<S12>/Unit Delay5' incorporates:
@@ -1347,10 +1417,16 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
    */
   DHM_DW.UnitDelay5_DSTATE = DHM_Y.VsINP_DHM_FLDoorHandleEE_sig_Vs;
 
+  /* Update for UnitDelay: '<S12>/Unit Delay2' */
+  DHM_DW.UnitDelay2_DSTATE = DHM_B.SO_b_CorrectPosToZero_j;
+
   /* Update for UnitDelay: '<S17>/Unit Delay5' incorporates:
    *  Outport: '<Root>/VsINP_DHM_RLDoorHandleEE_sig_VsINP_DHM_RLDoorHandleEE_sig'
    */
   DHM_DW.UnitDelay5_DSTATE_h = DHM_Y.VsINP_DHM_RLDoorHandleEE_sig_Vs;
+
+  /* Update for UnitDelay: '<S17>/Unit Delay2' */
+  DHM_DW.UnitDelay2_DSTATE_k = DHM_B.SO_b_CorrectPosToZero;
 
   /* Update for UnitDelay: '<S12>/Unit Delay1' */
   DHM_DW.UnitDelay1_DSTATE = DHM_B.SO_e_MotorCmd_c;
@@ -1365,7 +1441,6 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
 void DHM_initialize(void)
 {
   {
-    HndPos_Sts_E rtb_SO_m_DoorHndPosSts;
     uint8_T SO_e_MotorCmd_g;
     uint8_T SO_e_MotorPwm_e;
     boolean_T SO_b_Error_f;
@@ -1378,14 +1453,15 @@ void DHM_initialize(void)
     DHM_CtrlLogic_Init(&SO_e_MotorCmd_g, &SO_e_MotorPwm_e, &SO_b_Error_f);
 
     /* SystemInitialize for Chart: '<S12>/DoorHndPos' */
-    DHM_DoorHndPos_Init(&rtb_SO_m_DoorHndPosSts, &DHM_B.SO_s_MaxSoftPos_k,
-                        &DHM_B.SO_s_MinSoftPos_n, &DHM_B.SO_s_IceBrkPos_k);
+    DHM_DoorHndPos_Init(&DHM_B.SO_m_DoorHndPosSts_i, &DHM_B.SO_s_MaxSoftPos_k,
+                        &DHM_B.SO_s_MinSoftPos_n, &DHM_B.SO_s_IceBrkPos_k,
+                        &DHM_B.SO_s_CurrentPos_n);
 
     /* SystemInitialize for Chart: '<S12>/LearnLogic' incorporates:
      *  Outport: '<Root>/VsINP_DHM_FLDoorHandleEE_sig_VsINP_DHM_FLDoorHandleEE_sig'
      */
     DHM_LearnLogic_Init(&DHM_B.SO_e_LearnMotorCmd_f, &DHM_B.SO_e_LearnMotorPwm_p,
-                        &SO_b_Error_f, &DHM_B.SO_m_LearnSts_e,
+                        &DHM_B.SO_b_CorrectPosToZero_j, &DHM_B.SO_m_LearnSts_e,
                         &DHM_Y.VsINP_DHM_FLDoorHandleEE_sig_Vs,
                         &DHM_B.SO_b_Learning_j);
 
@@ -1410,14 +1486,15 @@ void DHM_initialize(void)
     DHM_CtrlLogic_Init(&SO_e_MotorCmd_g, &SO_e_MotorPwm_e, &SO_b_Error_f);
 
     /* SystemInitialize for Chart: '<S17>/DoorHndPos' */
-    DHM_DoorHndPos_Init(&rtb_SO_m_DoorHndPosSts, &DHM_B.SO_s_MaxSoftPos,
-                        &DHM_B.SO_s_MinSoftPos, &DHM_B.SO_s_IceBrkPos);
+    DHM_DoorHndPos_Init(&DHM_B.SO_m_DoorHndPosSts, &DHM_B.SO_s_MaxSoftPos,
+                        &DHM_B.SO_s_MinSoftPos, &DHM_B.SO_s_IceBrkPos,
+                        &DHM_B.SO_s_CurrentPos);
 
     /* SystemInitialize for Chart: '<S17>/LearnLogic' incorporates:
      *  Outport: '<Root>/VsINP_DHM_RLDoorHandleEE_sig_VsINP_DHM_RLDoorHandleEE_sig'
      */
     DHM_LearnLogic_Init(&DHM_B.SO_e_LearnMotorCmd, &DHM_B.SO_e_LearnMotorPwm,
-                        &SO_b_Error_f, &DHM_B.SO_m_LearnSts,
+                        &DHM_B.SO_b_CorrectPosToZero, &DHM_B.SO_m_LearnSts,
                         &DHM_Y.VsINP_DHM_RLDoorHandleEE_sig_Vs,
                         &DHM_B.SO_b_Learning);
 

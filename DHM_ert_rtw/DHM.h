@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.361
+ * Model version                  : 1.374
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Thu Oct 12 18:52:58 2023
+ * C/C++ source code generated on : Sun Oct 15 23:24:25 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -51,7 +51,12 @@ typedef struct {
 
 /* Block states (default storage) for system '<S12>/DoorHndPos' */
 typedef struct {
+  int16_T SL_s_TempHallCount;          /* '<S12>/DoorHndPos' */
   uint8_T is_active_c5_DoorHndDriver;  /* '<S12>/DoorHndPos' */
+  uint8_T is_c5_DoorHndDriver;         /* '<S12>/DoorHndPos' */
+  uint8_T temporalCounter_i1;          /* '<S12>/DoorHndPos' */
+  boolean_T SI_b_CorrectPosToZero_prev;/* '<S12>/DoorHndPos' */
+  boolean_T SI_b_CorrectPosToZero_start;/* '<S12>/DoorHndPos' */
 } DW_DoorHndPos_DHM_T;
 
 /* Block states (default storage) for system '<S12>/LearnLogic' */
@@ -96,9 +101,11 @@ typedef struct {
   int16_T SO_s_MaxSoftPos;             /* '<S17>/DoorHndPos' */
   int16_T SO_s_MinSoftPos;             /* '<S17>/DoorHndPos' */
   int16_T SO_s_IceBrkPos;              /* '<S17>/DoorHndPos' */
+  int16_T SO_s_CurrentPos;             /* '<S17>/DoorHndPos' */
   int16_T SO_s_MaxSoftPos_k;           /* '<S12>/DoorHndPos' */
   int16_T SO_s_MinSoftPos_n;           /* '<S12>/DoorHndPos' */
   int16_T SO_s_IceBrkPos_k;            /* '<S12>/DoorHndPos' */
+  int16_T SO_s_CurrentPos_n;           /* '<S12>/DoorHndPos' */
   uint8_T SO_e_MotorCmd;               /* '<S17>/MotorLogic' */
   uint8_T SO_e_LearnMotorCmd;          /* '<S17>/LearnLogic' */
   uint8_T SO_e_LearnMotorPwm;          /* '<S17>/LearnLogic' */
@@ -110,15 +117,19 @@ typedef struct {
   boolean_T SO_b_HndUnfoldReq_a;       /* '<S3>/RLDoorHndReq' */
   boolean_T SO_b_HndFoldReq_a;         /* '<S3>/RLDoorHndReq' */
   boolean_T SO_b_HallStall;            /* '<S17>/Stall' */
+  boolean_T SO_b_CorrectPosToZero;     /* '<S17>/LearnLogic' */
   boolean_T SO_b_Learning;             /* '<S17>/LearnLogic' */
   boolean_T SO_b_HndUnfoldReq_k;       /* '<S3>/FRDoorHndReq' */
   boolean_T SO_b_HndFoldReq_d;         /* '<S3>/FRDoorHndReq' */
   boolean_T SO_b_HndUnfoldReq_j;       /* '<S3>/FLDoorHndReq' */
   boolean_T SO_b_HndFoldReq_dm;        /* '<S3>/FLDoorHndReq' */
   boolean_T SO_b_HallStall_m;          /* '<S12>/Stall' */
+  boolean_T SO_b_CorrectPosToZero_j;   /* '<S12>/LearnLogic' */
   boolean_T SO_b_Learning_j;           /* '<S12>/LearnLogic' */
   Learn_Sts_E SO_m_LearnSts;           /* '<S17>/LearnLogic' */
   Learn_Sts_E SO_m_LearnSts_e;         /* '<S12>/LearnLogic' */
+  HndPos_Sts_E SO_m_DoorHndPosSts;     /* '<S17>/DoorHndPos' */
+  HndPos_Sts_E SO_m_DoorHndPosSts_i;   /* '<S12>/DoorHndPos' */
 } B_DHM_T;
 
 /* Block states (default storage) for system '<Root>' */
@@ -127,6 +138,8 @@ typedef struct {
   int16_T UnitDelay5_DSTATE_h;         /* '<S17>/Unit Delay5' */
   uint8_T UnitDelay1_DSTATE;           /* '<S12>/Unit Delay1' */
   uint8_T UnitDelay1_DSTATE_f;         /* '<S17>/Unit Delay1' */
+  boolean_T UnitDelay2_DSTATE;         /* '<S12>/Unit Delay2' */
+  boolean_T UnitDelay2_DSTATE_k;       /* '<S17>/Unit Delay2' */
   uint8_T is_active_c2_DHM;            /* '<S3>/LearnSts' */
   uint8_T is_active_c1_DHM;            /* '<S3>/HndReq' */
   DW_FLDoorHndReq_DHM_T sf_RRDoorHndReq;/* '<S3>/RRDoorHndReq' */
