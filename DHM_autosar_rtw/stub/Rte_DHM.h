@@ -7,7 +7,7 @@
    This file is generated for:
    Atomic software component:  "DHM"
    ARXML schema: "4.3"
-   File generated on: "12-Oct-2023 20:04:38"  */
+   File generated on: "17-Oct-2023 21:57:37"  */
 
 #ifndef Rte_DHM_h
 #define Rte_DHM_h
@@ -15,46 +15,6 @@
 #include "Compiler.h"
 
 /* Data access functions */
-#define Rte_Write_VbOUT_DHM_FLHadUnfold_flg_VbOUT_DHM_FLHadUnfold_flg Rte_Write_DHM_VbOUT_DHM_FLHadUnfold_flg_VbOUT_DHM_FLHadUnfold_flg
-
-Std_ReturnType Rte_Write_VbOUT_DHM_FLHadUnfold_flg_VbOUT_DHM_FLHadUnfold_flg
-  (Boolean u);
-
-#define Rte_Invalidate_VbOUT_DHM_FLHadUnfold_flg_VbOUT_DHM_FLHadUnfold_flg Rte_Invalidate_DHM_VbOUT_DHM_FLHadUnfold_flg_VbOUT_DHM_FLHadUnfold_flg
-
-Std_ReturnType
-  Rte_Invalidate_VbOUT_DHM_FLHadUnfold_flg_VbOUT_DHM_FLHadUnfold_flg(void);
-
-#define Rte_Write_VbOUT_DHM_FLHadFold_flg_VbOUT_DHM_FLHadFold_flg Rte_Write_DHM_VbOUT_DHM_FLHadFold_flg_VbOUT_DHM_FLHadFold_flg
-
-Std_ReturnType Rte_Write_VbOUT_DHM_FLHadFold_flg_VbOUT_DHM_FLHadFold_flg(Boolean
-  u);
-
-#define Rte_Invalidate_VbOUT_DHM_FLHadFold_flg_VbOUT_DHM_FLHadFold_flg Rte_Invalidate_DHM_VbOUT_DHM_FLHadFold_flg_VbOUT_DHM_FLHadFold_flg
-
-Std_ReturnType Rte_Invalidate_VbOUT_DHM_FLHadFold_flg_VbOUT_DHM_FLHadFold_flg
-  (void);
-
-#define Rte_Write_VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg Rte_Write_DHM_VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg
-
-Std_ReturnType
-  Rte_Write_VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg(Boolean u);
-
-#define Rte_Invalidate_VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg Rte_Invalidate_DHM_VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg
-
-Std_ReturnType
-  Rte_Invalidate_VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg(void);
-
-#define Rte_Write_VbOUT_DHM_RLHandleFold_flg_VbOUT_DHM_RLHandleFold_flg Rte_Write_DHM_VbOUT_DHM_RLHandleFold_flg_VbOUT_DHM_RLHandleFold_flg
-
-Std_ReturnType Rte_Write_VbOUT_DHM_RLHandleFold_flg_VbOUT_DHM_RLHandleFold_flg
-  (Boolean u);
-
-#define Rte_Invalidate_VbOUT_DHM_RLHandleFold_flg_VbOUT_DHM_RLHandleFold_flg Rte_Invalidate_DHM_VbOUT_DHM_RLHandleFold_flg_VbOUT_DHM_RLHandleFold_flg
-
-Std_ReturnType
-  Rte_Invalidate_VbOUT_DHM_RLHandleFold_flg_VbOUT_DHM_RLHandleFold_flg(void);
-
 #define Rte_Write_VsINP_DHM_FLDoorHandleEE_sig_VsINP_DHM_FLDoorHandleEE_sig Rte_Write_DHM_VsINP_DHM_FLDoorHandleEE_sig_VsINP_DHM_FLDoorHandleEE_sig
 
 Std_ReturnType
@@ -146,6 +106,18 @@ Std_ReturnType Rte_Read_VeOUT_SP_LHFdoorSts_sig_VeOUT_SP_LHFdoorSts_sig(UInt8* u
 #define Rte_Read_VeOUT_SP_LHRdoorSts_sig_VeOUT_SP_LHRdoorSts_sig Rte_Read_DHM_VeOUT_SP_LHRdoorSts_sig_VeOUT_SP_LHRdoorSts_sig
 
 Std_ReturnType Rte_Read_VeOUT_SP_LHRdoorSts_sig_VeOUT_SP_LHRdoorSts_sig(UInt8* u);
+
+#define Rte_Read_VsINP_EPRM_FLDoorHandleFromEE_sig_VsINP_EPRM_FLDoorHandleFromEE_sig Rte_Read_DHM_VsINP_EPRM_FLDoorHandleFromEE_sig_VsINP_EPRM_FLDoorHandleFromEE_sig
+
+Std_ReturnType
+  Rte_Read_VsINP_EPRM_FLDoorHandleFromEE_sig_VsINP_EPRM_FLDoorHandleFromEE_sig
+  (SInt16* u);
+
+#define Rte_Read_VsINP_EPRM_RLDoorHandleFromEE_sig_VsINP_EPRM_RLDoorHandleFromEE_sig Rte_Read_DHM_VsINP_EPRM_RLDoorHandleFromEE_sig_VsINP_EPRM_RLDoorHandleFromEE_sig
+
+Std_ReturnType
+  Rte_Read_VsINP_EPRM_RLDoorHandleFromEE_sig_VsINP_EPRM_RLDoorHandleFromEE_sig
+  (SInt16* u);
 
 #define Rte_Read_VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig Rte_Read_DHM_VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig
 
