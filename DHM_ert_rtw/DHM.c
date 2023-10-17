@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.386
+ * Model version                  : 1.389
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 21:21:35 2023
+ * C/C++ source code generated on : Tue Oct 17 21:27:30 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -808,6 +808,54 @@ void DHM_LearnLogic(boolean_T rtu_SI_b_HallStall, Boolean rtu_SI_b_LearnReq,
 
 /*
  * System initialize for atomic system:
+ *    '<S16>/MotorLogic'
+ *    '<S21>/MotorLogic'
+ */
+void DHM_MotorLogic_Init(uint8_T *rty_SO_e_MotorCmd, uint8_T *rty_SO_e_MotorPwm)
+{
+  *rty_SO_e_MotorCmd = 0U;
+  *rty_SO_e_MotorPwm = 0U;
+}
+
+/*
+ * Output and update for atomic system:
+ *    '<S16>/MotorLogic'
+ *    '<S21>/MotorLogic'
+ */
+void DHM_MotorLogic(uint8_T rtu_SI_e_LearnMotorCmd, uint8_T
+                    rtu_SI_e_LearnMotorPwm, uint8_T rtu_SI_e_CtrlMotorCmd,
+                    uint8_T rtu_SI_e_CtrlMotorPwm, uint8_T *rty_SO_e_MotorCmd,
+                    uint8_T *rty_SO_e_MotorPwm, DW_MotorLogic_DHM_T *localDW)
+{
+  /* Chart: '<S16>/MotorLogic' */
+  if (localDW->is_active_c4_DoorHndDriver == 0U) {
+    localDW->is_active_c4_DoorHndDriver = 1U;
+    if (rtu_SI_e_LearnMotorCmd != 0) {
+      *rty_SO_e_MotorCmd = rtu_SI_e_LearnMotorCmd;
+      *rty_SO_e_MotorPwm = rtu_SI_e_LearnMotorPwm;
+    } else if (rtu_SI_e_CtrlMotorCmd != 0) {
+      *rty_SO_e_MotorCmd = rtu_SI_e_CtrlMotorCmd;
+      *rty_SO_e_MotorPwm = rtu_SI_e_CtrlMotorPwm;
+    } else {
+      *rty_SO_e_MotorCmd = 0U;
+      *rty_SO_e_MotorPwm = 0U;
+    }
+  } else if (rtu_SI_e_LearnMotorCmd != 0) {
+    *rty_SO_e_MotorCmd = rtu_SI_e_LearnMotorCmd;
+    *rty_SO_e_MotorPwm = rtu_SI_e_LearnMotorPwm;
+  } else if (rtu_SI_e_CtrlMotorCmd != 0) {
+    *rty_SO_e_MotorCmd = rtu_SI_e_CtrlMotorCmd;
+    *rty_SO_e_MotorPwm = rtu_SI_e_CtrlMotorPwm;
+  } else {
+    *rty_SO_e_MotorCmd = 0U;
+    *rty_SO_e_MotorPwm = 0U;
+  }
+
+  /* End of Chart: '<S16>/MotorLogic' */
+}
+
+/*
+ * System initialize for atomic system:
  *    '<S16>/Stall'
  *    '<S21>/Stall'
  */
@@ -999,9 +1047,15 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   HndPos_Sts_E rtb_DataTypeConversion6;
   HndPos_Sts_E rtb_SO_m_DoorHndPosSts;
   HndPos_Sts_E rtb_SO_m_DoorHndPosSts_d;
-  uint8_T SO_e_LearnMotorCmd_j;
-  uint8_T SO_e_LearnMotorPwm;
-  uint8_T SO_e_LearnMotorPwm_i;
+  Learn_Sts_E rtb_DataTypeConversion12;
+  Learn_Sts_E rtb_DataTypeConversion13;
+  uint8_T SO_e_MotorCmd_e;
+  uint8_T SO_e_MotorPwm_d;
+  uint8_T rtb_SO_e_MotorCmd_k;
+  uint8_T rtb_SO_e_MotorPwm;
+  uint8_T rtb_SO_e_MotorPwm_e;
+  boolean_T SI_b_RRHndFoldReq_prev;
+  boolean_T SI_b_RRHndUnfoldReq_prev;
   boolean_T SO_b_CorrectPosToZero_e;
   boolean_T SO_b_Error_f;
 
@@ -1025,10 +1079,11 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   DHM_LearnLogic(DHM_B.SO_b_HallStall_d, DHM_Y.VbOUT_DHM_DoorHandleLrnReq_flg_,
                  DHM_U.VeINP_EPRM_FLDoorHandleLrnStsEE,
                  DHM_U.VsINP_EPRM_FLDoorHandleFromEE_s,
-                 DHM_U.VsINP_HWA_DriverHandleHall_sig_, &SO_e_LearnMotorCmd_j,
-                 &SO_e_LearnMotorPwm_i, &SO_b_CorrectPosToZero_e,
-                 &DHM_B.SO_m_LearnSts_g, &DHM_Y.VsINP_DHM_FLDoorHandleEE_sig_Vs,
-                 &DHM_B.SO_b_Learning_e, &DHM_DW.sf_LearnLogic);
+                 DHM_U.VsINP_HWA_DriverHandleHall_sig_,
+                 &DHM_B.SO_e_LearnMotorCmd_j, &DHM_B.SO_e_LearnMotorPwm_i,
+                 &SO_b_CorrectPosToZero_e, &DHM_B.SO_m_LearnSts_g,
+                 &DHM_Y.VsINP_DHM_FLDoorHandleEE_sig_Vs, &DHM_B.SO_b_Learning_e,
+                 &DHM_DW.sf_LearnLogic);
 
   /* Chart: '<S16>/DoorHndPos' incorporates:
    *  Inport: '<Root>/VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig'
@@ -1095,15 +1150,19 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   DHM_CtrlLogic(DHM_U.VsINP_HWA_DriverHandleHall_sig_, DHM_B.SO_s_MaxSoftPos_p,
                 DHM_B.SO_s_MinSoftPos_f, DHM_B.SO_s_IceBrkPos_e,
                 DHM_B.SO_b_HndFoldReq_dm, DHM_B.SO_b_HndUnfoldReq_j,
-                DHM_B.SO_m_LearnSts_g, DHM_B.SO_b_Learning_e,
-                &SO_e_LearnMotorCmd_j, &SO_e_LearnMotorPwm_i, &SO_b_Error_f,
-                &DHM_DW.sf_CtrlLogic);
+                DHM_B.SO_m_LearnSts_g, DHM_B.SO_b_Learning_e, &SO_e_MotorCmd_e,
+                &SO_e_MotorPwm_d, &SO_b_Error_f, &DHM_DW.sf_CtrlLogic);
+
+  /* Chart: '<S16>/MotorLogic' */
+  DHM_MotorLogic(DHM_B.SO_e_LearnMotorCmd_j, DHM_B.SO_e_LearnMotorPwm_i,
+                 SO_e_MotorCmd_e, SO_e_MotorPwm_d, &rtb_SO_e_MotorCmd_k,
+                 &rtb_SO_e_MotorPwm_e, &DHM_DW.sf_MotorLogic);
 
   /* Outport: '<Root>/VbOUT_DHM_FLHadUnfold_flg_VbOUT_DHM_FLHadUnfold_flg' incorporates:
    *  Constant: '<S4>/Constant'
    *  RelationalOperator: '<S4>/Compare'
    */
-  DHM_Y.VbOUT_DHM_FLHadUnfold_flg_VbOUT = (SO_e_LearnMotorCmd_j == 1);
+  DHM_Y.VbOUT_DHM_FLHadUnfold_flg_VbOUT = (rtb_SO_e_MotorCmd_k == 1);
 
   /* Chart: '<S21>/LearnLogic' incorporates:
    *  Inport: '<Root>/VeINP_EPRM_RLDoorHandleLrnStsEE_sig_VeINP_EPRM_RLDoorHandleLrnStsEE_sig'
@@ -1116,8 +1175,9 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   DHM_LearnLogic(DHM_B.SO_b_HallStall, DHM_Y.VbOUT_DHM_DoorHandleLrnReq_flg_,
                  DHM_U.VeINP_EPRM_RLDoorHandleLrnStsEE,
                  DHM_U.VsINP_EPRM_RLDoorHandleFromEE_s,
-                 DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN, &SO_e_LearnMotorPwm_i,
-                 &SO_e_LearnMotorPwm, &SO_b_Error_f, &DHM_B.SO_m_LearnSts,
+                 DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN,
+                 &DHM_B.SO_e_LearnMotorCmd, &DHM_B.SO_e_LearnMotorPwm,
+                 &SO_b_Error_f, &DHM_B.SO_m_LearnSts,
                  &DHM_Y.VsINP_DHM_RLDoorHandleEE_sig_Vs, &DHM_B.SO_b_Learning,
                  &DHM_DW.sf_LearnLogic_p);
 
@@ -1147,26 +1207,31 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   DHM_CtrlLogic(DHM_U.VsINP_HWA_RLHandleHall_sig_VsIN, DHM_B.SO_s_MaxSoftPos,
                 DHM_B.SO_s_MinSoftPos, DHM_B.SO_s_IceBrkPos,
                 DHM_B.SO_b_HndUnfoldReq_a, DHM_B.SO_b_HndFoldReq_a,
-                DHM_B.SO_m_LearnSts, DHM_B.SO_b_Learning, &SO_e_LearnMotorPwm_i,
-                &SO_e_LearnMotorPwm, &SO_b_Error_f, &DHM_DW.sf_CtrlLogic_e);
+                DHM_B.SO_m_LearnSts, DHM_B.SO_b_Learning, &SO_e_MotorPwm_d,
+                &rtb_SO_e_MotorPwm_e, &SO_b_Error_f, &DHM_DW.sf_CtrlLogic_e);
+
+  /* Chart: '<S21>/MotorLogic' */
+  DHM_MotorLogic(DHM_B.SO_e_LearnMotorCmd, DHM_B.SO_e_LearnMotorPwm,
+                 SO_e_MotorPwm_d, rtb_SO_e_MotorPwm_e, &SO_e_MotorCmd_e,
+                 &rtb_SO_e_MotorPwm, &DHM_DW.sf_MotorLogic_o);
 
   /* Outport: '<Root>/VbOUT_DHM_RLHandleUnfold_flg_VbOUT_DHM_RLHandleUnfold_flg' incorporates:
    *  Constant: '<S6>/Constant'
    *  RelationalOperator: '<S6>/Compare'
    */
-  DHM_Y.VbOUT_DHM_RLHandleUnfold_flg_Vb = (SO_e_LearnMotorPwm_i == 1);
+  DHM_Y.VbOUT_DHM_RLHandleUnfold_flg_Vb = (SO_e_MotorCmd_e == 1);
 
   /* Outport: '<Root>/VbOUT_DHM_RLHandleFold_flg_VbOUT_DHM_RLHandleFold_flg' incorporates:
    *  Constant: '<S7>/Constant'
    *  RelationalOperator: '<S7>/Compare'
    */
-  DHM_Y.VbOUT_DHM_RLHandleFold_flg_VbOU = (SO_e_LearnMotorPwm_i == 2);
+  DHM_Y.VbOUT_DHM_RLHandleFold_flg_VbOU = (SO_e_MotorCmd_e == 2);
 
   /* Outport: '<Root>/VbOUT_DHM_FLHadFold_flg_VbOUT_DHM_FLHadFold_flg' incorporates:
    *  Constant: '<S15>/Constant'
    *  RelationalOperator: '<S15>/Compare'
    */
-  DHM_Y.VbOUT_DHM_FLHadFold_flg_VbOUT_D = (SO_e_LearnMotorCmd_j == 2);
+  DHM_Y.VbOUT_DHM_FLHadFold_flg_VbOUT_D = (rtb_SO_e_MotorCmd_k == 2);
 
   /* DataTypeConversion: '<S3>/Data Type Conversion4' incorporates:
    *  Inport: '<Root>/VeINP_CAN_FRDoorHandleSts_sig_VeINP_CAN_FRDoorHandleSts_sig'
@@ -1188,6 +1253,16 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
    *  DataTypeConversion: '<S3>/Data Type Conversion11'
    */
   DHM_Y.VeOUT_DHM_RLDoorHandleLrnStsEE_ = DHM_B.SO_m_LearnSts;
+
+  /* DataTypeConversion: '<S3>/Data Type Conversion12' incorporates:
+   *  Inport: '<Root>/VeINP_CAN_FRDoorHandleLrnSts_sig_VeINP_CAN_FRDoorHandleLrnSts_sig'
+   */
+  rtb_DataTypeConversion12 = DHM_U.VeINP_CAN_FRDoorHandleLrnSts_si;
+
+  /* DataTypeConversion: '<S3>/Data Type Conversion13' incorporates:
+   *  Inport: '<Root>/VeINP_CAN_RRDoorHandleLrnSts_sig_VeINP_CAN_RRDoorHandleLrnSts_sig'
+   */
+  rtb_DataTypeConversion13 = DHM_U.VeINP_CAN_RRDoorHandleLrnSts_si;
 
   /* DataTypeConversion: '<S3>/Data Type Conversion6' incorporates:
    *  Inport: '<Root>/VeINP_CAN_RRDoorHandleSts_sig_VeINP_CAN_RRDoorHandleSts_sig'
@@ -1238,40 +1313,102 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
                    &DHM_B.SO_b_HndFoldReq, &DHM_DW.sf_RRDoorHndReq);
 
   /* Chart: '<S3>/HndReq' */
+  SO_b_CorrectPosToZero_e = DHM_DW.SI_b_FRHndFoldReq_start;
+  DHM_DW.SI_b_FRHndFoldReq_start = DHM_B.SO_b_HndFoldReq_d;
+  SO_b_Error_f = DHM_DW.SI_b_FRHndUnfoldReq_start;
+  DHM_DW.SI_b_FRHndUnfoldReq_start = DHM_B.SO_b_HndUnfoldReq_k;
+  SI_b_RRHndFoldReq_prev = DHM_DW.SI_b_RRHndFoldReq_start;
+  DHM_DW.SI_b_RRHndFoldReq_start = DHM_B.SO_b_HndFoldReq;
+  SI_b_RRHndUnfoldReq_prev = DHM_DW.SI_b_RRHndUnfoldReq_start;
+  DHM_DW.SI_b_RRHndUnfoldReq_start = DHM_B.SO_b_HndUnfoldReq;
   if (DHM_DW.is_active_c1_DHM == 0U) {
     DHM_DW.is_active_c1_DHM = 1U;
+    if ((DHM_B.SO_b_HndFoldReq_d != DHM_DW.SI_b_FRHndFoldReq_start) &&
+        DHM_DW.SI_b_FRHndFoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 1U;
+    } else if ((DHM_B.SO_b_HndUnfoldReq_k != DHM_DW.SI_b_FRHndUnfoldReq_start) &&
+               DHM_DW.SI_b_FRHndUnfoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 2U;
+    } else {
+      /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 0U;
+    }
 
-    /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
-    DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 0U;
+    if ((DHM_B.SO_b_HndFoldReq != DHM_DW.SI_b_RRHndFoldReq_start) &&
+        DHM_DW.SI_b_RRHndFoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 1U;
+    } else if ((DHM_B.SO_b_HndUnfoldReq != DHM_DW.SI_b_RRHndUnfoldReq_start) &&
+               DHM_DW.SI_b_RRHndUnfoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 2U;
+    } else {
+      /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 0U;
+    }
+  } else {
+    if ((SO_b_CorrectPosToZero_e != DHM_DW.SI_b_FRHndFoldReq_start) &&
+        DHM_DW.SI_b_FRHndFoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 1U;
+    } else if ((SO_b_Error_f != DHM_DW.SI_b_FRHndUnfoldReq_start) &&
+               DHM_DW.SI_b_FRHndUnfoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 2U;
+    } else {
+      /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 0U;
+    }
 
-    /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
-    DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 0U;
+    if ((SI_b_RRHndFoldReq_prev != DHM_DW.SI_b_RRHndFoldReq_start) &&
+        DHM_DW.SI_b_RRHndFoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 1U;
+    } else if ((SI_b_RRHndUnfoldReq_prev != DHM_DW.SI_b_RRHndUnfoldReq_start) &&
+               DHM_DW.SI_b_RRHndUnfoldReq_start) {
+      /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 2U;
+    } else {
+      /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
+      DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 0U;
+    }
   }
 
   /* End of Chart: '<S3>/HndReq' */
 
-  /* Chart: '<S3>/LearnSts' incorporates:
-   *  Inport: '<Root>/VeINP_CAN_FRDoorHandleLrnSts_sig_VeINP_CAN_FRDoorHandleLrnSts_sig'
-   *  Inport: '<Root>/VeINP_CAN_RRDoorHandleLrnSts_sig_VeINP_CAN_RRDoorHandleLrnSts_sig'
-   */
+  /* Chart: '<S3>/LearnSts' */
   if (DHM_DW.is_active_c2_DHM == 0U) {
-    Learn_Sts_E tmp;
-    Learn_Sts_E tmp_0;
     DHM_DW.is_active_c2_DHM = 1U;
-    tmp = DHM_U.VeINP_CAN_FRDoorHandleLrnSts_si;
-    tmp_0 = DHM_U.VeINP_CAN_RRDoorHandleLrnSts_si;
-    if ((DHM_B.SO_m_LearnSts_g == Learn_Success) && (tmp == Learn_Success) &&
-        (DHM_B.SO_m_LearnSts == Learn_Success) && (tmp_0 == Learn_Success)) {
+    if ((DHM_B.SO_m_LearnSts_g == Learn_Success) && (rtb_DataTypeConversion12 ==
+         Learn_Success) && (DHM_B.SO_m_LearnSts == Learn_Success) &&
+        (rtb_DataTypeConversion13 == Learn_Success)) {
       /* Outport: '<Root>/VeOUT_DHM_DoorHandleLrnSts_sig_VeOUT_DHM_DoorHandleLrnSts_sig' */
       DHM_Y.VeOUT_DHM_DoorHandleLrnSts_sig_ = 1U;
-    } else if ((DHM_B.SO_m_LearnSts_g == Learn_Fail) || (tmp == Learn_Fail) ||
-               (DHM_B.SO_m_LearnSts == Learn_Fail) || (tmp_0 == Learn_Fail)) {
+    } else if ((DHM_B.SO_m_LearnSts_g == Learn_Fail) ||
+               (rtb_DataTypeConversion12 == Learn_Fail) || (DHM_B.SO_m_LearnSts ==
+                Learn_Fail) || (rtb_DataTypeConversion13 == Learn_Fail)) {
       /* Outport: '<Root>/VeOUT_DHM_DoorHandleLrnSts_sig_VeOUT_DHM_DoorHandleLrnSts_sig' */
       DHM_Y.VeOUT_DHM_DoorHandleLrnSts_sig_ = 2U;
     } else {
       /* Outport: '<Root>/VeOUT_DHM_DoorHandleLrnSts_sig_VeOUT_DHM_DoorHandleLrnSts_sig' */
       DHM_Y.VeOUT_DHM_DoorHandleLrnSts_sig_ = 0U;
     }
+  } else if ((DHM_B.SO_m_LearnSts_g == Learn_Success) &&
+             (rtb_DataTypeConversion12 == Learn_Success) && (DHM_B.SO_m_LearnSts
+              == Learn_Success) && (rtb_DataTypeConversion13 == Learn_Success))
+  {
+    /* Outport: '<Root>/VeOUT_DHM_DoorHandleLrnSts_sig_VeOUT_DHM_DoorHandleLrnSts_sig' */
+    DHM_Y.VeOUT_DHM_DoorHandleLrnSts_sig_ = 1U;
+  } else if ((DHM_B.SO_m_LearnSts_g == Learn_Fail) || (rtb_DataTypeConversion12 ==
+              Learn_Fail) || (DHM_B.SO_m_LearnSts == Learn_Fail) ||
+             (rtb_DataTypeConversion13 == Learn_Fail)) {
+    /* Outport: '<Root>/VeOUT_DHM_DoorHandleLrnSts_sig_VeOUT_DHM_DoorHandleLrnSts_sig' */
+    DHM_Y.VeOUT_DHM_DoorHandleLrnSts_sig_ = 2U;
+  } else {
+    /* Outport: '<Root>/VeOUT_DHM_DoorHandleLrnSts_sig_VeOUT_DHM_DoorHandleLrnSts_sig' */
+    DHM_Y.VeOUT_DHM_DoorHandleLrnSts_sig_ = 0U;
   }
 
   /* End of Chart: '<S3>/LearnSts' */
@@ -1294,10 +1431,10 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   DHM_DW.UnitDelay5_DSTATE_g = DHM_Y.VsINP_DHM_RLDoorHandleEE_sig_Vs;
 
   /* Update for UnitDelay: '<S16>/Unit Delay1' */
-  DHM_DW.UnitDelay1_DSTATE = SO_e_LearnMotorCmd_j;
+  DHM_DW.UnitDelay1_DSTATE = rtb_SO_e_MotorCmd_k;
 
   /* Update for UnitDelay: '<S21>/Unit Delay1' */
-  DHM_DW.UnitDelay1_DSTATE_a = SO_e_LearnMotorPwm_i;
+  DHM_DW.UnitDelay1_DSTATE_a = SO_e_MotorCmd_e;
 
   /* End of Outputs for RootInportFunctionCallGenerator generated from: '<Root>/DHM_Step' */
 }
@@ -1325,10 +1462,13 @@ void DHM_initialize(void)
     /* SystemInitialize for Chart: '<S16>/LearnLogic' incorporates:
      *  Outport: '<Root>/VsINP_DHM_FLDoorHandleEE_sig_VsINP_DHM_FLDoorHandleEE_sig'
      */
-    DHM_LearnLogic_Init(&SO_e_MotorCmd_e, &SO_e_MotorPwm_d, &SO_b_Error_f,
-                        &DHM_B.SO_m_LearnSts_g,
+    DHM_LearnLogic_Init(&DHM_B.SO_e_LearnMotorCmd_j, &DHM_B.SO_e_LearnMotorPwm_i,
+                        &SO_b_Error_f, &DHM_B.SO_m_LearnSts_g,
                         &DHM_Y.VsINP_DHM_FLDoorHandleEE_sig_Vs,
                         &DHM_B.SO_b_Learning_e);
+
+    /* SystemInitialize for Chart: '<S16>/MotorLogic' */
+    DHM_MotorLogic_Init(&SO_e_MotorCmd_e, &SO_e_MotorPwm_d);
 
     /* SystemInitialize for Chart: '<S16>/Stall' */
     DHM_Stall_Init(&DHM_B.SO_b_HallStall_d);
@@ -1349,10 +1489,13 @@ void DHM_initialize(void)
     /* SystemInitialize for Chart: '<S21>/LearnLogic' incorporates:
      *  Outport: '<Root>/VsINP_DHM_RLDoorHandleEE_sig_VsINP_DHM_RLDoorHandleEE_sig'
      */
-    DHM_LearnLogic_Init(&SO_e_MotorCmd_e, &SO_e_MotorPwm_d, &SO_b_Error_f,
-                        &DHM_B.SO_m_LearnSts,
+    DHM_LearnLogic_Init(&DHM_B.SO_e_LearnMotorCmd, &DHM_B.SO_e_LearnMotorPwm,
+                        &SO_b_Error_f, &DHM_B.SO_m_LearnSts,
                         &DHM_Y.VsINP_DHM_RLDoorHandleEE_sig_Vs,
                         &DHM_B.SO_b_Learning);
+
+    /* SystemInitialize for Chart: '<S21>/MotorLogic' */
+    DHM_MotorLogic_Init(&SO_e_MotorCmd_e, &SO_e_MotorPwm_d);
 
     /* SystemInitialize for Chart: '<S21>/Stall' */
     DHM_Stall_Init(&DHM_B.SO_b_HallStall);

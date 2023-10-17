@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.386
+ * Model version                  : 1.389
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 21:21:35 2023
+ * C/C++ source code generated on : Tue Oct 17 21:27:30 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -44,6 +44,12 @@ extern void DHM_LearnLogic(boolean_T rtu_SI_b_HallStall, Boolean
   *rty_SO_e_LearnMotorCmd, uint8_T *rty_SO_e_LearnMotorPwm, boolean_T
   *rty_SO_b_CorrectPosToZero, Learn_Sts_E *rty_SO_m_LearnSts, int16_T
   *rty_SO_s_MaxPos, boolean_T *rty_SO_b_Learning, DW_LearnLogic_DHM_T *localDW);
+extern void DHM_MotorLogic_Init(uint8_T *rty_SO_e_MotorCmd, uint8_T
+  *rty_SO_e_MotorPwm);
+extern void DHM_MotorLogic(uint8_T rtu_SI_e_LearnMotorCmd, uint8_T
+  rtu_SI_e_LearnMotorPwm, uint8_T rtu_SI_e_CtrlMotorCmd, uint8_T
+  rtu_SI_e_CtrlMotorPwm, uint8_T *rty_SO_e_MotorCmd, uint8_T *rty_SO_e_MotorPwm,
+  DW_MotorLogic_DHM_T *localDW);
 extern void DHM_Stall_Init(boolean_T *rty_SO_b_HallStall);
 extern void DHM_Stall(SInt16 rtu_SI_s_CurrentPos, uint8_T rtu_SI_e_MotorCmd,
                       boolean_T *rty_SO_b_HallStall, DW_Stall_DHM_T *localDW);
