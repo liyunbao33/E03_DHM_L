@@ -5,7 +5,7 @@
  *
  * Model version                  : 1.386
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 20:34:25 2023
+ * C/C++ source code generated on : Tue Oct 17 21:21:35 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -66,11 +66,6 @@ typedef struct {
   boolean_T SI_b_LearnReq_start;       /* '<S16>/LearnLogic' */
 } DW_LearnLogic_DHM_T;
 
-/* Block states (default storage) for system '<S16>/MotorLogic' */
-typedef struct {
-  uint8_T is_active_c4_DoorHndDriver;  /* '<S16>/MotorLogic' */
-} DW_MotorLogic_DHM_T;
-
 /* Block states (default storage) for system '<S16>/Stall' */
 typedef struct {
   int16_T SL_s_CurrentPos_Old;         /* '<S16>/Stall' */
@@ -100,12 +95,6 @@ typedef struct {
   int16_T SO_s_MaxSoftPos_p;           /* '<S16>/DoorHndPos' */
   int16_T SO_s_MinSoftPos_f;           /* '<S16>/DoorHndPos' */
   int16_T SO_s_IceBrkPos_e;            /* '<S16>/DoorHndPos' */
-  uint8_T SO_e_MotorCmd;               /* '<S21>/MotorLogic' */
-  uint8_T SO_e_LearnMotorCmd;          /* '<S21>/LearnLogic' */
-  uint8_T SO_e_LearnMotorPwm;          /* '<S21>/LearnLogic' */
-  uint8_T SO_e_MotorCmd_a;             /* '<S16>/MotorLogic' */
-  uint8_T SO_e_LearnMotorCmd_j;        /* '<S16>/LearnLogic' */
-  uint8_T SO_e_LearnMotorPwm_i;        /* '<S16>/LearnLogic' */
   boolean_T SO_b_HndUnfoldReq;         /* '<S3>/RRDoorHndReq' */
   boolean_T SO_b_HndFoldReq;           /* '<S3>/RRDoorHndReq' */
   boolean_T SO_b_HndUnfoldReq_a;       /* '<S3>/RLDoorHndReq' */
@@ -133,14 +122,12 @@ typedef struct {
   DW_FLDoorHndReq_DHM_T sf_RRDoorHndReq;/* '<S3>/RRDoorHndReq' */
   DW_FLDoorHndReq_DHM_T sf_RLDoorHndReq;/* '<S3>/RLDoorHndReq' */
   DW_Stall_DHM_T sf_Stall_i;           /* '<S21>/Stall' */
-  DW_MotorLogic_DHM_T sf_MotorLogic_o; /* '<S21>/MotorLogic' */
   DW_LearnLogic_DHM_T sf_LearnLogic_p; /* '<S21>/LearnLogic' */
   DW_DoorHndPos_DHM_T sf_DoorHndPos_a; /* '<S21>/DoorHndPos' */
   DW_CtrlLogic_DHM_T sf_CtrlLogic_e;   /* '<S21>/CtrlLogic' */
   DW_FLDoorHndReq_DHM_T sf_FRDoorHndReq;/* '<S3>/FRDoorHndReq' */
   DW_FLDoorHndReq_DHM_T sf_FLDoorHndReq;/* '<S3>/FLDoorHndReq' */
   DW_Stall_DHM_T sf_Stall;             /* '<S16>/Stall' */
-  DW_MotorLogic_DHM_T sf_MotorLogic;   /* '<S16>/MotorLogic' */
   DW_LearnLogic_DHM_T sf_LearnLogic;   /* '<S16>/LearnLogic' */
   DW_DoorHndPos_DHM_T sf_DoorHndPos;   /* '<S16>/DoorHndPos' */
   DW_CtrlLogic_DHM_T sf_CtrlLogic;     /* '<S16>/CtrlLogic' */
@@ -293,13 +280,11 @@ extern RT_MODEL_DHM_T *const DHM_M;
  * '<S25>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver/CtrlLogic'
  * '<S26>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver/DoorHndPos'
  * '<S27>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver/LearnLogic'
- * '<S28>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver/MotorLogic'
- * '<S29>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver/Stall'
- * '<S30>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/CtrlLogic'
- * '<S31>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/DoorHndPos'
- * '<S32>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/LearnLogic'
- * '<S33>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/MotorLogic'
- * '<S34>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/Stall'
+ * '<S28>'  : 'DHM/DHM_Step_sys/DHM/FLDoorHndDriver/Stall'
+ * '<S29>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/CtrlLogic'
+ * '<S30>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/DoorHndPos'
+ * '<S31>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/LearnLogic'
+ * '<S32>'  : 'DHM/DHM_Step_sys/DHM/RLDoorHndDriver/Stall'
  */
 #endif                                 /* RTW_HEADER_DHM_h_ */
 
