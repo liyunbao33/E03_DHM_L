@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.389
+ * Model version                  : 1.392
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 21:27:30 2023
+ * C/C++ source code generated on : Tue Oct 17 21:36:20 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -128,10 +128,6 @@ typedef struct {
   uint8_T UnitDelay1_DSTATE_a;         /* '<S21>/Unit Delay1' */
   uint8_T is_active_c2_DHM;            /* '<S3>/LearnSts' */
   uint8_T is_active_c1_DHM;            /* '<S3>/HndReq' */
-  boolean_T SI_b_FRHndFoldReq_start;   /* '<S3>/HndReq' */
-  boolean_T SI_b_FRHndUnfoldReq_start; /* '<S3>/HndReq' */
-  boolean_T SI_b_RRHndFoldReq_start;   /* '<S3>/HndReq' */
-  boolean_T SI_b_RRHndUnfoldReq_start; /* '<S3>/HndReq' */
   DW_FLDoorHndReq_DHM_T sf_RRDoorHndReq;/* '<S3>/RRDoorHndReq' */
   DW_FLDoorHndReq_DHM_T sf_RLDoorHndReq;/* '<S3>/RLDoorHndReq' */
   DW_Stall_DHM_T sf_Stall_i;           /* '<S21>/Stall' */

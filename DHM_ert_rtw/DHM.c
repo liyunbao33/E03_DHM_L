@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.389
+ * Model version                  : 1.392
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 21:27:30 2023
+ * C/C++ source code generated on : Tue Oct 17 21:36:20 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -951,7 +951,7 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
     localDW->temporalCounter_i1++;
   }
 
-  if (localDW->temporalCounter_i2 < 127U) {
+  if (localDW->temporalCounter_i2 < 7U) {
     localDW->temporalCounter_i2++;
   }
 
@@ -973,7 +973,7 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
   } else {
     switch (localDW->is_Unfold) {
      case DHM_IN_CrashUnfoldReq:
-      if (localDW->temporalCounter_i2 >= 100) {
+      if (localDW->temporalCounter_i2 >= 5) {
         localDW->is_Unfold = DHM_IN_Idle_ai;
         *rty_SO_b_HndUnfoldReq = false;
         localDW->SL_b_UnfoldReqTrig = ((rtu_SI_b_DoorOpen ||
@@ -1005,7 +1005,7 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
 
      default:
       /* case IN_NormalUnfoldReq: */
-      if (localDW->temporalCounter_i2 >= 100) {
+      if (localDW->temporalCounter_i2 >= 5) {
         localDW->is_Unfold = DHM_IN_Idle_ai;
         *rty_SO_b_HndUnfoldReq = false;
         localDW->SL_b_UnfoldReqTrig = ((rtu_SI_b_DoorOpen ||
@@ -1054,8 +1054,6 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   uint8_T rtb_SO_e_MotorCmd_k;
   uint8_T rtb_SO_e_MotorPwm;
   uint8_T rtb_SO_e_MotorPwm_e;
-  boolean_T SI_b_RRHndFoldReq_prev;
-  boolean_T SI_b_RRHndUnfoldReq_prev;
   boolean_T SO_b_CorrectPosToZero_e;
   boolean_T SO_b_Error_f;
 
@@ -1313,22 +1311,12 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
                    &DHM_B.SO_b_HndFoldReq, &DHM_DW.sf_RRDoorHndReq);
 
   /* Chart: '<S3>/HndReq' */
-  SO_b_CorrectPosToZero_e = DHM_DW.SI_b_FRHndFoldReq_start;
-  DHM_DW.SI_b_FRHndFoldReq_start = DHM_B.SO_b_HndFoldReq_d;
-  SO_b_Error_f = DHM_DW.SI_b_FRHndUnfoldReq_start;
-  DHM_DW.SI_b_FRHndUnfoldReq_start = DHM_B.SO_b_HndUnfoldReq_k;
-  SI_b_RRHndFoldReq_prev = DHM_DW.SI_b_RRHndFoldReq_start;
-  DHM_DW.SI_b_RRHndFoldReq_start = DHM_B.SO_b_HndFoldReq;
-  SI_b_RRHndUnfoldReq_prev = DHM_DW.SI_b_RRHndUnfoldReq_start;
-  DHM_DW.SI_b_RRHndUnfoldReq_start = DHM_B.SO_b_HndUnfoldReq;
   if (DHM_DW.is_active_c1_DHM == 0U) {
     DHM_DW.is_active_c1_DHM = 1U;
-    if ((DHM_B.SO_b_HndFoldReq_d != DHM_DW.SI_b_FRHndFoldReq_start) &&
-        DHM_DW.SI_b_FRHndFoldReq_start) {
+    if (DHM_B.SO_b_HndFoldReq_d) {
       /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 1U;
-    } else if ((DHM_B.SO_b_HndUnfoldReq_k != DHM_DW.SI_b_FRHndUnfoldReq_start) &&
-               DHM_DW.SI_b_FRHndUnfoldReq_start) {
+    } else if (DHM_B.SO_b_HndUnfoldReq_k) {
       /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 2U;
     } else {
@@ -1336,12 +1324,10 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
       DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 0U;
     }
 
-    if ((DHM_B.SO_b_HndFoldReq != DHM_DW.SI_b_RRHndFoldReq_start) &&
-        DHM_DW.SI_b_RRHndFoldReq_start) {
+    if (DHM_B.SO_b_HndFoldReq) {
       /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 1U;
-    } else if ((DHM_B.SO_b_HndUnfoldReq != DHM_DW.SI_b_RRHndUnfoldReq_start) &&
-               DHM_DW.SI_b_RRHndUnfoldReq_start) {
+    } else if (DHM_B.SO_b_HndUnfoldReq) {
       /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 2U;
     } else {
@@ -1349,12 +1335,10 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
       DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 0U;
     }
   } else {
-    if ((SO_b_CorrectPosToZero_e != DHM_DW.SI_b_FRHndFoldReq_start) &&
-        DHM_DW.SI_b_FRHndFoldReq_start) {
+    if (DHM_B.SO_b_HndFoldReq_d) {
       /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 1U;
-    } else if ((SO_b_Error_f != DHM_DW.SI_b_FRHndUnfoldReq_start) &&
-               DHM_DW.SI_b_FRHndUnfoldReq_start) {
+    } else if (DHM_B.SO_b_HndUnfoldReq_k) {
       /* Outport: '<Root>/VeOUT_DHM_FRDoorHandleReq_sig_VeOUT_DHM_FRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 2U;
     } else {
@@ -1362,12 +1346,10 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
       DHM_Y.VeOUT_DHM_FRDoorHandleReq_sig_V = 0U;
     }
 
-    if ((SI_b_RRHndFoldReq_prev != DHM_DW.SI_b_RRHndFoldReq_start) &&
-        DHM_DW.SI_b_RRHndFoldReq_start) {
+    if (DHM_B.SO_b_HndFoldReq) {
       /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 1U;
-    } else if ((SI_b_RRHndUnfoldReq_prev != DHM_DW.SI_b_RRHndUnfoldReq_start) &&
-               DHM_DW.SI_b_RRHndUnfoldReq_start) {
+    } else if (DHM_B.SO_b_HndUnfoldReq) {
       /* Outport: '<Root>/VeOUT_DHM_RRDoorHandleReq_sig_VeOUT_DHM_RRDoorHandleReq_sig' */
       DHM_Y.VeOUT_DHM_RRDoorHandleReq_sig_V = 2U;
     } else {
