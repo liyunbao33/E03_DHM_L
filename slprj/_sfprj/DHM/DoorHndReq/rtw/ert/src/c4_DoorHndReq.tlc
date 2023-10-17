@@ -7,7 +7,7 @@
 %endfunction
 %function ChartDataMap(block, system) void
   %createrecord ChartDataElements {\
-    NumChartData   8 \
+    NumChartData   9 \
     ChartDataDefaults {\
       RecordType   "ChartData"\
       Dimensions   []\
@@ -39,6 +39,13 @@
       Description  "ChartLocal"\
       SFName       ""\
       Path         "SL_b_UnfoldReqTrig"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SL_b_FoldReqTrig"\
+      Description  "ChartLocal"\
+      SFName       ""\
+      Path         "SL_b_FoldReqTrig"\
       SrcLocation  ""\
     }\
     ChartData {\

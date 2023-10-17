@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.385
+ * Model version                  : 1.386
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 19:27:15 2023
+ * C/C++ source code generated on : Tue Oct 17 20:34:25 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -959,8 +959,8 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
       Door_Unlock)) && localDW->SL_b_UnfoldReqTrig);
     localDW->is_Fold = DHM_IN_Idle_ai;
     *rty_SO_b_HndFoldReq = false;
-    localDW->SL_b_UnfoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
-      (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_UnfoldReqTrig);
+    localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
+      (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
   } else {
     switch (localDW->is_Unfold) {
      case DHM_IN_CrashUnfoldReq:
@@ -1009,21 +1009,21 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
       if (localDW->temporalCounter_i1 >= 5) {
         localDW->is_Fold = DHM_IN_Idle_ai;
         *rty_SO_b_HndFoldReq = false;
-        localDW->SL_b_UnfoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
-          (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_UnfoldReqTrig);
+        localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
+          (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
       }
 
       /* case IN_Idle: */
     } else if (((rtu_SI_m_DoorLockSts == Door_Lock) || (rtu_SI_e_EspVehSpd >= 15))
-               && (!localDW->SL_b_UnfoldReqTrig) && (!rtu_SI_b_CrashOutpSts) &&
+               && (!localDW->SL_b_FoldReqTrig) && (!rtu_SI_b_CrashOutpSts) &&
                (rtu_SI_m_HndPosSts != Hnd_Fold)) {
       localDW->is_Fold = DHM_IN_FoldReq;
       localDW->temporalCounter_i1 = 0U;
       *rty_SO_b_HndFoldReq = true;
-      localDW->SL_b_UnfoldReqTrig = true;
+      localDW->SL_b_FoldReqTrig = true;
     } else {
-      localDW->SL_b_UnfoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
-        (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_UnfoldReqTrig);
+      localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
+        (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
     }
   }
 

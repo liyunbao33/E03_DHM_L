@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.385
+ * Model version                  : 1.386
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 19:27:15 2023
+ * C/C++ source code generated on : Tue Oct 17 20:34:25 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -87,6 +87,7 @@ typedef struct {
   uint8_T temporalCounter_i1;          /* '<S3>/FLDoorHndReq' */
   uint8_T temporalCounter_i2;          /* '<S3>/FLDoorHndReq' */
   boolean_T SL_b_UnfoldReqTrig;        /* '<S3>/FLDoorHndReq' */
+  boolean_T SL_b_FoldReqTrig;          /* '<S3>/FLDoorHndReq' */
   boolean_T SI_b_CrashOutpSts_prev;    /* '<S3>/FLDoorHndReq' */
   boolean_T SI_b_CrashOutpSts_start;   /* '<S3>/FLDoorHndReq' */
 } DW_FLDoorHndReq_DHM_T;
