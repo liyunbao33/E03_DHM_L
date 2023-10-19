@@ -5,7 +5,7 @@
  *
  * Model version                  : 1.396
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Thu Oct 19 09:32:59 2023
+ * C/C++ source code generated on : Thu Oct 19 09:56:27 2023
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -82,6 +82,7 @@ typedef struct {
 /* Block states (default storage) for system '<S3>/FLDoorHndReq' */
 typedef struct {
   uint8_T is_active_c4_DoorHndReq;     /* '<S3>/FLDoorHndReq' */
+  uint8_T is_c4_DoorHndReq;            /* '<S3>/FLDoorHndReq' */
   uint8_T is_Fold;                     /* '<S3>/FLDoorHndReq' */
   uint8_T is_Unfold;                   /* '<S3>/FLDoorHndReq' */
   uint8_T temporalCounter_i1;          /* '<S3>/FLDoorHndReq' */
