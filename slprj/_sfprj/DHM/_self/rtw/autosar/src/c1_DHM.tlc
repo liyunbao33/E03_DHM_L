@@ -7,7 +7,7 @@
 %endfunction
 %function ChartDataMap(block, system) void
   %createrecord ChartDataElements {\
-    NumChartData   1 \
+    NumChartData   11 \
     ChartDataDefaults {\
       RecordType   "ChartData"\
       Dimensions   []\
@@ -18,6 +18,76 @@
       Description  "StateIsActive"\
       SFName       ""\
       Path         ""\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "is_FRHndReq"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "FRHndReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "is_RRHndReq"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "RRHndReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_FRHndFoldReq_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_FRHndFoldReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_FRHndFoldReq_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_FRHndFoldReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_FRHndUnfoldReq_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_FRHndUnfoldReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_FRHndUnfoldReq_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_FRHndUnfoldReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_RRHndFoldReq_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_RRHndFoldReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_RRHndFoldReq_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_RRHndFoldReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_RRHndUnfoldReq_prev"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_RRHndUnfoldReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "SI_b_RRHndUnfoldReq_start"\
+      Description  "ChangeDetectionDoubleBuffer"\
+      SFName       ""\
+      Path         "SI_b_RRHndUnfoldReq"\
       SrcLocation  ""\
     }\
   }

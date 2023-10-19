@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.396
+ * Model version                  : 1.426
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Thu Oct 19 10:01:19 2023
+ * C/C++ source code generated on : Thu Oct 19 15:51:49 2023
  *
  * Target selection: autosar.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -65,6 +65,11 @@
 #define DHM_IN_Idle_ai                 ((uint8)2U)
 #define DHM_IN_NormalUnfoldReq         ((uint8)3U)
 #define DHM_IN_PowerOnDelay            ((uint8)2U)
+
+/* Named constants for Chart: '<S3>/HndReq' */
+#define DHM_IN_FoldReq_e               ((uint8)1U)
+#define DHM_IN_Idle_p                  ((uint8)2U)
+#define DHM_IN_UnfoldReq               ((uint8)3U)
 
 /* Block signals (default storage) */
 B_DHM_T DHM_B;
@@ -1119,7 +1124,7 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   /* DataStoreWrite: '<S3>/Data Store Write' incorporates:
    *  Constant: '<S3>/Constant'
    */
-  DHM_DW.E03_DHM_L = 3U;
+  DHM_DW.E03_DHM_L = 4U;
 
   /* SignalConversion generated from: '<S2>/VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig_read' incorporates:
    *  Inport: '<Root>/VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig'
@@ -1325,38 +1330,105 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
                    &DHM_B.SO_b_HndFoldReq, &DHM_DW.sf_RRDoorHndReq);
 
   /* Chart: '<S3>/HndReq' */
+  DHM_DW.SI_b_FRHndFoldReq_prev = DHM_DW.SI_b_FRHndFoldReq_start;
+  DHM_DW.SI_b_FRHndFoldReq_start = DHM_B.SO_b_HndFoldReq_d;
+  DHM_DW.SI_b_FRHndUnfoldReq_prev = DHM_DW.SI_b_FRHndUnfoldReq_start;
+  DHM_DW.SI_b_FRHndUnfoldReq_start = DHM_B.SO_b_HndUnfoldReq_k;
+  DHM_DW.SI_b_RRHndFoldReq_prev = DHM_DW.SI_b_RRHndFoldReq_start;
+  DHM_DW.SI_b_RRHndFoldReq_start = DHM_B.SO_b_HndFoldReq;
+  DHM_DW.SI_b_RRHndUnfoldReq_prev = DHM_DW.SI_b_RRHndUnfoldReq_start;
+  DHM_DW.SI_b_RRHndUnfoldReq_start = DHM_B.SO_b_HndUnfoldReq;
   if (DHM_DW.is_active_c1_DHM == 0U) {
+    DHM_DW.SI_b_FRHndFoldReq_prev = DHM_B.SO_b_HndFoldReq_d;
+    DHM_DW.SI_b_FRHndUnfoldReq_prev = DHM_B.SO_b_HndUnfoldReq_k;
+    DHM_DW.SI_b_RRHndFoldReq_prev = DHM_B.SO_b_HndFoldReq;
+    DHM_DW.SI_b_RRHndUnfoldReq_prev = DHM_B.SO_b_HndUnfoldReq;
     DHM_DW.is_active_c1_DHM = 1U;
-    if (DHM_B.SO_b_HndFoldReq_d) {
-      SO_e_FRHndReq = 1U;
-    } else if (DHM_B.SO_b_HndUnfoldReq_k) {
-      SO_e_FRHndReq = 2U;
-    } else {
-      SO_e_FRHndReq = 0U;
-    }
-
-    if (DHM_B.SO_b_HndFoldReq) {
-      SO_e_RRHndReq = 1U;
-    } else if (DHM_B.SO_b_HndUnfoldReq) {
-      SO_e_RRHndReq = 2U;
-    } else {
-      SO_e_RRHndReq = 0U;
-    }
+    DHM_DW.is_FRHndReq = DHM_IN_Idle_p;
+    SO_e_FRHndReq = 0U;
+    DHM_DW.is_RRHndReq = DHM_IN_Idle_p;
+    SO_e_RRHndReq = 0U;
   } else {
-    if (DHM_B.SO_b_HndFoldReq_d) {
+    switch (DHM_DW.is_FRHndReq) {
+     case DHM_IN_FoldReq_e:
       SO_e_FRHndReq = 1U;
-    } else if (DHM_B.SO_b_HndUnfoldReq_k) {
-      SO_e_FRHndReq = 2U;
-    } else {
+      if ((DHM_DW.SI_b_FRHndUnfoldReq_prev != DHM_DW.SI_b_FRHndUnfoldReq_start) &&
+          DHM_DW.SI_b_FRHndUnfoldReq_start) {
+        DHM_DW.is_FRHndReq = DHM_IN_UnfoldReq;
+        SO_e_FRHndReq = 2U;
+      } else if (!DHM_B.SO_b_HndFoldReq_d) {
+        DHM_DW.is_FRHndReq = DHM_IN_Idle_p;
+        SO_e_FRHndReq = 0U;
+      }
+      break;
+
+     case DHM_IN_Idle_p:
       SO_e_FRHndReq = 0U;
+      if ((DHM_DW.SI_b_FRHndFoldReq_prev != DHM_DW.SI_b_FRHndFoldReq_start) &&
+          DHM_DW.SI_b_FRHndFoldReq_start) {
+        DHM_DW.is_FRHndReq = DHM_IN_FoldReq_e;
+        SO_e_FRHndReq = 1U;
+      } else if ((DHM_DW.SI_b_FRHndUnfoldReq_prev !=
+                  DHM_DW.SI_b_FRHndUnfoldReq_start) &&
+                 DHM_DW.SI_b_FRHndUnfoldReq_start) {
+        DHM_DW.is_FRHndReq = DHM_IN_UnfoldReq;
+        SO_e_FRHndReq = 2U;
+      }
+      break;
+
+     default:
+      /* case IN_UnfoldReq: */
+      SO_e_FRHndReq = 2U;
+      if ((DHM_DW.SI_b_FRHndFoldReq_prev != DHM_DW.SI_b_FRHndFoldReq_start) &&
+          DHM_DW.SI_b_FRHndFoldReq_start) {
+        DHM_DW.is_FRHndReq = DHM_IN_FoldReq_e;
+        SO_e_FRHndReq = 1U;
+      } else if (!DHM_B.SO_b_HndUnfoldReq_k) {
+        DHM_DW.is_FRHndReq = DHM_IN_Idle_p;
+        SO_e_FRHndReq = 0U;
+      }
+      break;
     }
 
-    if (DHM_B.SO_b_HndFoldReq) {
+    switch (DHM_DW.is_RRHndReq) {
+     case DHM_IN_FoldReq_e:
       SO_e_RRHndReq = 1U;
-    } else if (DHM_B.SO_b_HndUnfoldReq) {
-      SO_e_RRHndReq = 2U;
-    } else {
+      if ((DHM_DW.SI_b_RRHndUnfoldReq_prev != DHM_DW.SI_b_RRHndUnfoldReq_start) &&
+          DHM_DW.SI_b_RRHndUnfoldReq_start) {
+        DHM_DW.is_RRHndReq = DHM_IN_UnfoldReq;
+        SO_e_RRHndReq = 2U;
+      } else if (!DHM_B.SO_b_HndFoldReq) {
+        DHM_DW.is_RRHndReq = DHM_IN_Idle_p;
+        SO_e_RRHndReq = 0U;
+      }
+      break;
+
+     case DHM_IN_Idle_p:
       SO_e_RRHndReq = 0U;
+      if ((DHM_DW.SI_b_RRHndFoldReq_prev != DHM_DW.SI_b_RRHndFoldReq_start) &&
+          DHM_DW.SI_b_RRHndFoldReq_start) {
+        DHM_DW.is_RRHndReq = DHM_IN_FoldReq_e;
+        SO_e_RRHndReq = 1U;
+      } else if ((DHM_DW.SI_b_RRHndUnfoldReq_prev !=
+                  DHM_DW.SI_b_RRHndUnfoldReq_start) &&
+                 DHM_DW.SI_b_RRHndUnfoldReq_start) {
+        DHM_DW.is_RRHndReq = DHM_IN_UnfoldReq;
+        SO_e_RRHndReq = 2U;
+      }
+      break;
+
+     default:
+      /* case IN_UnfoldReq: */
+      SO_e_RRHndReq = 2U;
+      if ((DHM_DW.SI_b_RRHndFoldReq_prev != DHM_DW.SI_b_RRHndFoldReq_start) &&
+          DHM_DW.SI_b_RRHndFoldReq_start) {
+        DHM_DW.is_RRHndReq = DHM_IN_FoldReq_e;
+        SO_e_RRHndReq = 1U;
+      } else if (!DHM_B.SO_b_HndUnfoldReq) {
+        DHM_DW.is_RRHndReq = DHM_IN_Idle_p;
+        SO_e_RRHndReq = 0U;
+      }
+      break;
     }
   }
 
