@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.393
+ * Model version                  : 1.396
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 17 21:57:30 2023
+ * C/C++ source code generated on : Thu Oct 19 10:01:19 2023
  *
  * Target selection: autosar.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -61,8 +61,10 @@
 /* Named constants for Chart: '<S3>/FLDoorHndReq' */
 #define DHM_IN_CrashUnfoldReq          ((uint8)1U)
 #define DHM_IN_FoldReq                 ((uint8)1U)
+#define DHM_IN_Func                    ((uint8)1U)
 #define DHM_IN_Idle_ai                 ((uint8)2U)
 #define DHM_IN_NormalUnfoldReq         ((uint8)3U)
+#define DHM_IN_PowerOnDelay            ((uint8)2U)
 
 /* Block signals (default storage) */
 B_DHM_T DHM_B;
@@ -934,7 +936,7 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
                       *rty_SO_b_HndUnfoldReq, boolean *rty_SO_b_HndFoldReq,
                       DW_FLDoorHndReq_DHM_T *localDW)
 {
-  if (localDW->temporalCounter_i1 < 7U) {
+  if (localDW->temporalCounter_i1 < 127U) {
     localDW->temporalCounter_i1++;
   }
 
@@ -949,15 +951,30 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
   if (localDW->is_active_c4_DoorHndReq == 0U) {
     localDW->SI_b_CrashOutpSts_prev = rtu_SI_b_CrashOutpSts;
     localDW->is_active_c4_DoorHndReq = 1U;
-    localDW->is_Unfold = DHM_IN_Idle_ai;
-    *rty_SO_b_HndUnfoldReq = false;
-    localDW->SL_b_UnfoldReqTrig = ((rtu_SI_b_DoorOpen || (rtu_SI_m_DoorLockSts ==
-      Door_Unlock)) && localDW->SL_b_UnfoldReqTrig);
-    localDW->is_Fold = DHM_IN_Idle_ai;
-    *rty_SO_b_HndFoldReq = false;
-    localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
-      (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
-  } else {
+    localDW->is_c4_DoorHndReq = DHM_IN_PowerOnDelay;
+    localDW->temporalCounter_i1 = 0U;
+  } else if (localDW->is_c4_DoorHndReq == DHM_IN_Func) {
+    if (localDW->is_Fold == DHM_IN_FoldReq) {
+      if (localDW->temporalCounter_i1 >= 5) {
+        localDW->is_Fold = DHM_IN_Idle_ai;
+        *rty_SO_b_HndFoldReq = false;
+        localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
+          (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
+      }
+
+      /* case IN_Idle: */
+    } else if (((rtu_SI_m_DoorLockSts == Door_Lock) || (rtu_SI_e_EspVehSpd >= 15))
+               && (!localDW->SL_b_FoldReqTrig) && (!rtu_SI_b_CrashOutpSts) &&
+               (rtu_SI_m_HndPosSts != Hnd_Fold)) {
+      localDW->is_Fold = DHM_IN_FoldReq;
+      localDW->temporalCounter_i1 = 0U;
+      *rty_SO_b_HndFoldReq = true;
+      localDW->SL_b_FoldReqTrig = true;
+    } else {
+      localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
+        (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
+    }
+
     switch (localDW->is_Unfold) {
      case DHM_IN_CrashUnfoldReq:
       if (localDW->temporalCounter_i2 >= 5) {
@@ -1001,26 +1018,18 @@ void DHM_FLDoorHndReq(Boolean rtu_SI_b_CrashOutpSts, UInt8 rtu_SI_e_EspVehSpd,
       break;
     }
 
-    if (localDW->is_Fold == DHM_IN_FoldReq) {
-      if (localDW->temporalCounter_i1 >= 5) {
-        localDW->is_Fold = DHM_IN_Idle_ai;
-        *rty_SO_b_HndFoldReq = false;
-        localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
-          (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
-      }
-
-      /* case IN_Idle: */
-    } else if (((rtu_SI_m_DoorLockSts == Door_Lock) || (rtu_SI_e_EspVehSpd >= 15))
-               && (!localDW->SL_b_FoldReqTrig) && (!rtu_SI_b_CrashOutpSts) &&
-               (rtu_SI_m_HndPosSts != Hnd_Fold)) {
-      localDW->is_Fold = DHM_IN_FoldReq;
-      localDW->temporalCounter_i1 = 0U;
-      *rty_SO_b_HndFoldReq = true;
-      localDW->SL_b_FoldReqTrig = true;
-    } else {
-      localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
-        (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
-    }
+    /* case IN_PowerOnDelay: */
+  } else if (localDW->temporalCounter_i1 >= 100) {
+    /*  上电延迟1s，防止底层信号量未及时传递导致请求误触发  */
+    localDW->is_c4_DoorHndReq = DHM_IN_Func;
+    localDW->is_Fold = DHM_IN_Idle_ai;
+    *rty_SO_b_HndFoldReq = false;
+    localDW->SL_b_FoldReqTrig = (((rtu_SI_m_DoorLockSts == Door_Lock) ||
+      (rtu_SI_e_EspVehSpd >= 15)) && localDW->SL_b_FoldReqTrig);
+    localDW->is_Unfold = DHM_IN_Idle_ai;
+    *rty_SO_b_HndUnfoldReq = false;
+    localDW->SL_b_UnfoldReqTrig = ((rtu_SI_b_DoorOpen || (rtu_SI_m_DoorLockSts ==
+      Door_Unlock)) && localDW->SL_b_UnfoldReqTrig);
   }
 
   /* End of Chart: '<S3>/FLDoorHndReq' */
@@ -1260,7 +1269,7 @@ void DHM_Step(void)                    /* Explicit Task: DHM_Step */
   /* Chart: '<S21>/CtrlLogic' */
   DHM_CtrlLogic(DHM_B.TmpSignalConversionAtVsINP_HW_a, DHM_B.SO_s_MaxSoftPos,
                 DHM_B.SO_s_MinSoftPos, DHM_B.SO_s_IceBrkPos,
-                DHM_B.SO_b_HndUnfoldReq_a, DHM_B.SO_b_HndFoldReq_a,
+                DHM_B.SO_b_HndFoldReq_a, DHM_B.SO_b_HndUnfoldReq_a,
                 DHM_B.SO_m_LearnSts, DHM_B.SO_b_Learning, &DHM_B.SO_e_MotorCmd,
                 &DHM_B.SO_e_MotorPwm, &SO_b_Error_f, &DHM_DW.sf_CtrlLogic_e);
 
