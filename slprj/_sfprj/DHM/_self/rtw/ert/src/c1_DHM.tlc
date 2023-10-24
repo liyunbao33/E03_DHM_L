@@ -21,17 +21,17 @@
       SrcLocation  ""\
     }\
     ChartData {\
-      Name         "is_RRHndReq"\
-      Description  "StateActiveChild"\
-      SFName       ""\
-      Path         "RRHndReq"\
-      SrcLocation  ""\
-    }\
-    ChartData {\
       Name         "is_FRHndReq"\
       Description  "StateActiveChild"\
       SFName       ""\
       Path         "FRHndReq"\
+      SrcLocation  ""\
+    }\
+    ChartData {\
+      Name         "is_RRHndReq"\
+      Description  "StateActiveChild"\
+      SFName       ""\
+      Path         "RRHndReq"\
       SrcLocation  ""\
     }\
     ChartData {\

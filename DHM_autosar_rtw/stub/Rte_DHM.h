@@ -7,7 +7,7 @@
    This file is generated for:
    Atomic software component:  "DHM"
    ARXML schema: "4.3"
-   File generated on: "19-Oct-2023 15:51:54"  */
+   File generated on: "24-Oct-2023 17:21:27"  */
 
 #ifndef Rte_DHM_h
 #define Rte_DHM_h
@@ -106,18 +106,6 @@ Std_ReturnType Rte_Read_VeOUT_SP_LHFdoorSts_sig_VeOUT_SP_LHFdoorSts_sig(UInt8* u
 #define Rte_Read_VeOUT_SP_LHRdoorSts_sig_VeOUT_SP_LHRdoorSts_sig Rte_Read_DHM_VeOUT_SP_LHRdoorSts_sig_VeOUT_SP_LHRdoorSts_sig
 
 Std_ReturnType Rte_Read_VeOUT_SP_LHRdoorSts_sig_VeOUT_SP_LHRdoorSts_sig(UInt8* u);
-
-#define Rte_Read_VsINP_EPRM_FLDoorHandleFromEE_sig_VsINP_EPRM_FLDoorHandleFromEE_sig Rte_Read_DHM_VsINP_EPRM_FLDoorHandleFromEE_sig_VsINP_EPRM_FLDoorHandleFromEE_sig
-
-Std_ReturnType
-  Rte_Read_VsINP_EPRM_FLDoorHandleFromEE_sig_VsINP_EPRM_FLDoorHandleFromEE_sig
-  (SInt16* u);
-
-#define Rte_Read_VsINP_EPRM_RLDoorHandleFromEE_sig_VsINP_EPRM_RLDoorHandleFromEE_sig Rte_Read_DHM_VsINP_EPRM_RLDoorHandleFromEE_sig_VsINP_EPRM_RLDoorHandleFromEE_sig
-
-Std_ReturnType
-  Rte_Read_VsINP_EPRM_RLDoorHandleFromEE_sig_VsINP_EPRM_RLDoorHandleFromEE_sig
-  (SInt16* u);
 
 #define Rte_Read_VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig Rte_Read_DHM_VsINP_HWA_DriverHandleHall_sig_VsINP_HWA_DriverHandleHall_sig
 
