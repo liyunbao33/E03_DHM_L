@@ -3,9 +3,9 @@
  *
  * Code generated for Simulink model 'DHM'.
  *
- * Model version                  : 1.428
+ * Model version                  : 1.430
  * Simulink Coder version         : 9.7 (R2022a) 13-Nov-2021
- * C/C++ source code generated on : Tue Oct 24 17:21:21 2023
+ * C/C++ source code generated on : Sat Oct 28 12:28:23 2023
  *
  * Target selection: autosar.tlc
  * Embedded hardware selection: Intel->x86-64 (Windows64)
@@ -29,7 +29,10 @@ typedef struct {
   uint8 is_active_c1_DoorHndDriver;    /* '<S16>/CtrlLogic' */
   uint8 is_Ctrl;                       /* '<S16>/CtrlLogic' */
   uint8 is_Unfold;                     /* '<S16>/CtrlLogic' */
+  uint8 is_Icebreak;                   /* '<S16>/CtrlLogic' */
   uint8 is_Fold;                       /* '<S16>/CtrlLogic' */
+  uint8 SL_e_CycleCount;               /* '<S16>/CtrlLogic' */
+  uint8 SL_e_IceBrkCount;              /* '<S16>/CtrlLogic' */
   uint8 temporalCounter_i1;            /* '<S16>/CtrlLogic' */
   boolean SI_b_DoorHndUnfoldReq_prev;  /* '<S16>/CtrlLogic' */
   boolean SI_b_DoorHndUnfoldReq_start; /* '<S16>/CtrlLogic' */
@@ -42,10 +45,30 @@ typedef struct {
   uint8 is_active_c5_DoorHndDriver;    /* '<S16>/DoorHndPos' */
 } DW_DoorHndPos_DHM_T;
 
+/* Block states (default storage) for system '<S16>/LearnLogic' */
+typedef struct {
+  uint16 temporalCounter_i1;           /* '<S16>/LearnLogic' */
+  uint8 is_active_c3_DoorHndDriver;    /* '<S16>/LearnLogic' */
+  uint8 is_c3_DoorHndDriver;           /* '<S16>/LearnLogic' */
+  uint8 is_LearnLogic;                 /* '<S16>/LearnLogic' */
+  uint8 SL_e_AutoLearnCount;           /* '<S16>/LearnLogic' */
+  uint8 SL_e_tempPos;                  /* '<S16>/LearnLogic' */
+  boolean SI_b_LearnReq_prev;          /* '<S16>/LearnLogic' */
+  boolean SI_b_LearnReq_start;         /* '<S16>/LearnLogic' */
+} DW_LearnLogic_DHM_T;
+
 /* Block states (default storage) for system '<S16>/MotorLogic' */
 typedef struct {
   uint8 is_active_c4_DoorHndDriver;    /* '<S16>/MotorLogic' */
 } DW_MotorLogic_DHM_T;
+
+/* Block states (default storage) for system '<S16>/Stall' */
+typedef struct {
+  sint16 SL_s_CurrentPos_Old;          /* '<S16>/Stall' */
+  uint8 is_active_c2_DoorHndDriver;    /* '<S16>/Stall' */
+  uint8 is_Stall_Handler;              /* '<S16>/Stall' */
+  uint8 temporalCounter_i1;            /* '<S16>/Stall' */
+} DW_Stall_DHM_T;
 
 /* Block states (default storage) for system '<S3>/FLDoorHndReq' */
 typedef struct {
@@ -63,6 +86,8 @@ typedef struct {
 
 /* Block signals (default storage) */
 typedef struct tag_B_DHM_T {
+  SInt16 TmpSignalConversionAtVsINP_HWA_;
+  SInt16 TmpSignalConversionAtVsINP_HW_a;
   sint16 SO_s_MaxPos;                  /* '<S21>/LearnLogic' */
   sint16 SO_s_MaxSoftPos;              /* '<S21>/DoorHndPos' */
   sint16 SO_s_MinSoftPos;              /* '<S21>/DoorHndPos' */
@@ -73,9 +98,13 @@ typedef struct tag_B_DHM_T {
   sint16 SO_s_IceBrkPos_e;             /* '<S16>/DoorHndPos' */
   uint8 SO_e_LearnMotorCmd;            /* '<S21>/LearnLogic' */
   uint8 SO_e_LearnMotorPwm;            /* '<S21>/LearnLogic' */
+  uint8 SO_e_MotorCmd;                 /* '<S21>/CtrlLogic' */
+  uint8 SO_e_MotorPwm;                 /* '<S21>/CtrlLogic' */
   uint8 SO_e_LearnSts;                 /* '<S3>/LearnSts' */
   uint8 SO_e_LearnMotorCmd_j;          /* '<S16>/LearnLogic' */
   uint8 SO_e_LearnMotorPwm_i;          /* '<S16>/LearnLogic' */
+  uint8 SO_e_MotorCmd_e;               /* '<S16>/CtrlLogic' */
+  uint8 SO_e_MotorPwm_d;               /* '<S16>/CtrlLogic' */
   Boolean VbINP_HWA_DoorHandleLrnReq_flg_;
   /* '<S2>/VbINP_HWA_DoorHandleLrnReq_flg_VbINP_HWA_DoorHandleLrnReq_flg_read' */
   boolean SO_b_HndUnfoldReq;           /* '<S3>/RRDoorHndReq' */
@@ -96,6 +125,10 @@ typedef struct tag_B_DHM_T {
 
 /* Block states (default storage) for system '<Root>' */
 typedef struct tag_DW_DHM_T {
+  sint16 UnitDelay5_DSTATE;            /* '<S16>/Unit Delay5' */
+  sint16 UnitDelay5_DSTATE_g;          /* '<S21>/Unit Delay5' */
+  uint8 UnitDelay1_DSTATE;             /* '<S16>/Unit Delay1' */
+  uint8 UnitDelay1_DSTATE_a;           /* '<S21>/Unit Delay1' */
   uint8 E03_DHM_L;                     /* '<S3>/Data Store Memory' */
   uint8 is_active_c1_DHM;              /* '<S3>/HndReq' */
   uint8 is_FRHndReq;                   /* '<S3>/HndReq' */
@@ -110,12 +143,16 @@ typedef struct tag_DW_DHM_T {
   boolean SI_b_RRHndUnfoldReq_start;   /* '<S3>/HndReq' */
   DW_FLDoorHndReq_DHM_T sf_RRDoorHndReq;/* '<S3>/RRDoorHndReq' */
   DW_FLDoorHndReq_DHM_T sf_RLDoorHndReq;/* '<S3>/RLDoorHndReq' */
+  DW_Stall_DHM_T sf_Stall_i;           /* '<S21>/Stall' */
   DW_MotorLogic_DHM_T sf_MotorLogic_o; /* '<S21>/MotorLogic' */
+  DW_LearnLogic_DHM_T sf_LearnLogic_p; /* '<S21>/LearnLogic' */
   DW_DoorHndPos_DHM_T sf_DoorHndPos_a; /* '<S21>/DoorHndPos' */
   DW_CtrlLogic_DHM_T sf_CtrlLogic_e;   /* '<S21>/CtrlLogic' */
   DW_FLDoorHndReq_DHM_T sf_FRDoorHndReq;/* '<S3>/FRDoorHndReq' */
   DW_FLDoorHndReq_DHM_T sf_FLDoorHndReq;/* '<S3>/FLDoorHndReq' */
+  DW_Stall_DHM_T sf_Stall;             /* '<S16>/Stall' */
   DW_MotorLogic_DHM_T sf_MotorLogic;   /* '<S16>/MotorLogic' */
+  DW_LearnLogic_DHM_T sf_LearnLogic;   /* '<S16>/LearnLogic' */
   DW_DoorHndPos_DHM_T sf_DoorHndPos;   /* '<S16>/DoorHndPos' */
   DW_CtrlLogic_DHM_T sf_CtrlLogic;     /* '<S16>/CtrlLogic' */
 } DW_DHM_T;

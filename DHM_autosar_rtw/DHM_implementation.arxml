@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 Auto generated XML Component Description for model DHM
-Model version                : 1.428
+Model version                : 1.430
 Simulink Coder version       : Simulink Coder 9.7 (R2022a) 13-Nov-2021
-XML source code generated on : Tue Oct 24 17:21:28 2023
-Model Checksum               : 3200509306 225061620 3863446204 1868468345
+XML source code generated on : Sat Oct 28 12:28:31 2023
+Model Checksum               : 2857153401 2944583320 888510450 1142040406
 -->
 <AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_4-3-1.xsd">
     <AR-PACKAGES>
@@ -44,7 +44,7 @@ Model Checksum               : 3200509306 225061620 3863446204 1868468345
                     <RESOURCE-CONSUMPTION>
                         <SHORT-NAME>RsrcCons_DHM</SHORT-NAME>
                     </RESOURCE-CONSUMPTION>
-                    <SW-VERSION>1.428.1</SW-VERSION>
+                    <SW-VERSION>1.430.1</SW-VERSION>
                     <USED-CODE-GENERATOR>Embedded Coder 7.8 (R2022a) 23-Nov-2021</USED-CODE-GENERATOR>
                     <VENDOR-ID>0</VENDOR-ID>
                     <BEHAVIOR-REF DEST="SWC-INTERNAL-BEHAVIOR">/Components/DHM/DHM</BEHAVIOR-REF>
